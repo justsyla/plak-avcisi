@@ -1,1 +1,1 @@
-{"name": "Plak Avcısı: Kral Mutans'a Karşı", "short_name": "Plak Avcısı", "start_url": "/plak-avcisi/", "scope": "/plak-avcisi/", "display": "standalone", "background_color": "#9db6c4", "theme_color": "#7c9eb2", "icons": [{"src": "Logo.jpg", "sizes": "512x512", "type": "image/jpeg", "purpose": "any maskable"}]}
+{"name":"Plak Avcısı: Kral Mutans'a Karşı","short_name":"Plak Avcısı","start_url":"./","scope":"./","display":"standalone","background_color":"#9db6c4","theme_color":"#7c9eb2","icons":[{"src":"Logo.jpg","sizes":"512x512","type":"image/jpeg","purpose":"any"}]}
