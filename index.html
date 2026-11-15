@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#0284c7" />
+  <meta name="theme-color" content="#7c9eb2" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Plak Avcısı" />
-  <title>Plak Avcısı: Kral Mutans'a Karşı | Dt. Sıla</title>
+  <title>Plak Avcısı: Kral Mutans'a Karşı | Stj. Dt. Sıla</title>
   <link id="pwa-manifest" rel="manifest" href="" />
-  <link id="apple-touch-icon" rel="apple-touch-icon" href="" />
+  <link id="apple-touch-icon" rel="apple-touch-icon" href="logo.jpg" />
+  <link id="favicon-link" rel="icon" type="image/jpeg" href="logo.jpg" />
 
   <!-- Türkçe Karakter Uyumlu Oyun Fontları -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -85,11 +86,13 @@
 
   <!-- Üst Menü Barı -->
   <header class="sticky top-0 z-30 bg-white/85 backdrop-blur-md border-b border-sky-100 px-4 py-3 flex items-center justify-between shadow-sm">
-    <div class="flex items-center gap-2">
-      <span class="text-2xl">🦷</span>
+    <div class="flex items-center gap-2.5">
+      <img src="logo.jpg" onerror="this.style.display='none'; document.getElementById('fallback-hdr-icon').style.display='inline-block';"
+           alt="Plak Avcısı Logo" class="w-10 h-10 rounded-xl object-cover shadow-sm border border-sky-200" />
+      <span id="fallback-hdr-icon" class="hidden text-2xl">🦷</span>
       <div>
         <h1 class="text-lg sm:text-xl font-extrabold text-sky-700 leading-none">PLAK AVCISI</h1>
-        <p class="text-[11px] font-bold text-emerald-600">Dt. Sıla Klinik Görevi</p>
+        <p class="text-[11px] font-bold text-emerald-600">Stj. Dt. Sıla Klinik Görevi</p>
       </div>
     </div>
     <div class="flex items-center gap-2">
@@ -97,7 +100,7 @@
         💾 Yerel Mod
       </span>
       <button onclick="openDoctorPinModal()" class="text-xs font-bold bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-200 px-3 py-1.5 rounded-xl transition flex items-center gap-1">
-        🩺 Dt. Sıla Paneli
+        🦷 Stj. Dt. Sıla Paneli
       </button>
     </div>
   </header>
@@ -107,31 +110,35 @@
 
     <!-- 1. GİRİŞ / KAYIT EKRANI (Sadece İsim + Şifre) -->
     <section id="login-screen" class="glass-card rounded-3xl p-6 text-center space-y-5">
-      <div class="w-20 h-20 mx-auto bg-gradient-to-tr from-sky-400 to-emerald-400 rounded-3xl flex items-center justify-center text-4xl shadow-lg animate-float">
-        🛡️
+      <!-- Özel Uygulama Logosu (logo.jpg) -->
+      <div class="w-32 h-32 mx-auto rounded-3xl overflow-hidden shadow-xl shadow-sky-200/80 border-2 border-white animate-float bg-[#9db6c4] flex items-center justify-center">
+        <img src="logo.jpg" onerror="this.style.display='none'; document.getElementById('fallback-hero-tooth').style.display='flex';"
+             alt="Plak Avcısı Stj. Dt. Sıla" class="w-full h-full object-cover" />
+        <div id="fallback-hero-tooth" class="hidden w-full h-full items-center justify-center text-5xl">🦷</div>
       </div>
+
       <div>
         <h2 class="text-2xl font-extrabold text-slate-800">Kral Mutans'a Karşı!</h2>
         <p class="text-sm text-slate-600 mt-1 font-medium">
-          Dt. Sıla'nın sana verdiği <strong>4 haneli şifreyi</strong> ve kahraman adını gir, göreve başla!
+          Stj. Dt. Sıla'nın sana verdiği <strong>4 haneli şifreyi</strong> ve kahraman adını gir, göreve başla!
         </p>
       </div>
 
       <div class="space-y-3 text-left">
         <div>
           <label class="block text-xs font-bold text-slate-600 mb-1 ml-1">🦸 Kahraman Adın (İsmin veya Lakabın)</label>
-          <input id="login-name" type="text" maxlength="20" placeholder="Örn: Mert veya SüperAslan"
+          <input id="login-name" type="text" maxlength="20" placeholder="Örn: Mert veya SüperKahraman"
             class="w-full px-4 py-3 rounded-2xl border-2 border-sky-100 focus:border-sky-400 focus:outline-none font-bold text-slate-800 bg-white" />
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1 ml-1">🔑 Dt. Sıla'nın Verdiği 4 Haneli Şifre</label>
+          <label class="block text-xs font-bold text-slate-600 mb-1 ml-1">🔑 Stj. Dt. Sıla'nın Verdiği 4 Haneli Şifre</label>
           <input id="login-pin" type="tel" maxlength="4" placeholder="Örn: 4821"
             class="w-full px-4 py-3 rounded-2xl border-2 border-sky-100 focus:border-sky-400 focus:outline-none font-extrabold text-center tracking-[0.4em] text-lg text-sky-700 bg-white" />
         </div>
       </div>
 
-      <!-- Kahraman Seçimi -->
+      <!-- Kahraman Seçimi (Unicorn, Prenses, Peri Kızı, Prens, Şövalye, Araba) -->
       <div class="text-left">
         <label class="block text-xs font-bold text-slate-600 mb-2 ml-1">✨ Ajan Karakterini Seç</label>
         <div id="hero-grid" class="grid grid-cols-3 gap-2"></div>
@@ -148,11 +155,11 @@
     <!-- 2. AKTİF OYUN EKRANI -->
     <section id="game-screen" class="hidden space-y-4">
 
-      <!-- Dt. Sıla'dan Gelen Özel Hekim Notu Banner'ı -->
+      <!-- Stj. Dt. Sıla'dan Gelen Özel Hekim Notu Banner'ı -->
       <div id="doctor-note-banner" class="hidden rounded-2xl p-4 bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-300 shadow-sm flex items-start gap-3">
         <span class="text-2xl">💌</span>
         <div class="flex-1">
-          <p class="text-[11px] font-extrabold uppercase tracking-wider text-amber-700">Dt. Sıla'dan Sana Mesaj Var!</p>
+          <p class="text-[11px] font-extrabold uppercase tracking-wider text-amber-700">Stj. Dt. Sıla'dan Sana Mesaj Var!</p>
           <p id="doctor-note-text" class="text-sm font-bold text-slate-800 mt-0.5"></p>
         </div>
       </div>
@@ -160,7 +167,7 @@
       <!-- Oyuncu Üst Bilgi Kartı -->
       <div class="glass-card rounded-3xl p-4 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <div id="player-avatar-badge" class="w-14 h-14 rounded-2xl bg-sky-100 flex items-center justify-center text-3xl shadow-inner">🦁</div>
+          <div id="player-avatar-badge" class="w-14 h-14 rounded-2xl bg-sky-100 flex items-center justify-center text-3xl shadow-inner">🦄</div>
           <div>
             <div class="flex items-center gap-1.5">
               <h2 id="player-display-name" class="text-lg font-extrabold text-slate-800 leading-tight">Ajan</h2>
@@ -186,7 +193,6 @@
           <span class="text-slate-500">Hedef: <span id="target-days-label">14</span> Gün</span>
         </div>
 
-        <!-- Canavar Görseli -->
         <div id="monster-container" class="my-3 relative inline-block">
           <div id="monster-emoji" class="text-7xl sm:text-8xl animate-float cursor-pointer transition-transform">🦠</div>
           <div id="damage-popup" class="hidden absolute -top-2 -right-6 bg-rose-500 text-white font-game font-extrabold text-sm px-2.5 py-1 rounded-full shadow-lg">
@@ -197,7 +203,6 @@
         <h3 class="text-xl font-extrabold text-rose-600">Kral Mutans & Asit Ordusu</h3>
         <p id="monster-taunt" class="text-xs font-bold text-slate-500 mb-3">"Dişlerini fırçalamazsan kaleler kuracağım!"</p>
 
-        <!-- HP Barı -->
         <div class="w-full bg-slate-200 rounded-full h-5 p-0.5 overflow-hidden shadow-inner">
           <div id="boss-hp-bar" class="h-full rounded-full bg-gradient-to-r from-rose-500 to-orange-400 transition-all duration-500 flex items-center justify-end pr-2" style="width: 100%;">
           </div>
@@ -207,7 +212,6 @@
           <span class="text-emerald-600">%<span id="boss-percent">100</span></span>
         </div>
 
-        <!-- Zafer Sertifikası Butonu (Canavar Yenilince Açılır) -->
         <button id="victory-cert-btn" onclick="openCertificateModal()"
           class="hidden mt-4 w-full py-3 rounded-2xl bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-900 font-game font-extrabold text-base shadow-lg animate-bounce">
           🏆 Zafer Sertifikanı Al!
@@ -233,7 +237,7 @@
         </button>
       </div>
 
-      <!-- GÜNLÜK SÜPER GÜÇLER (Ekstra Koruma Kalkanları) -->
+      <!-- GÜNLÜK SÜPER GÜÇLER -->
       <div class="glass-card rounded-3xl p-4 space-y-2.5">
         <div class="flex items-center justify-between">
           <h3 class="text-sm font-extrabold text-slate-700">⚡ Günlük Süper Güçler (+15 HP Hasar)</h3>
@@ -269,7 +273,7 @@
   <!-- PWA TELEFONA UYGULAMA OLARAK YÜKLEME ÇUBUĞU -->
   <div id="pwa-install-banner" class="hidden fixed bottom-3 left-3 right-3 z-40 max-w-lg mx-auto bg-slate-900 text-white rounded-2xl p-3.5 shadow-2xl border border-slate-700 flex items-center justify-between gap-3">
     <div class="flex items-center gap-2.5">
-      <span class="text-2xl">📲</span>
+      <img src="logo.jpg" onerror="this.style.display='none'" class="w-9 h-9 rounded-xl object-cover" />
       <div>
         <p class="text-xs font-extrabold text-sky-300">Uygulamayı Ana Ekrana Ekle</p>
         <p id="pwa-install-desc" class="text-[11px] text-slate-300">Tek dokunuşla açmak ve bildirim almak için yükle!</p>
@@ -283,7 +287,7 @@
     </div>
   </div>
 
-  <!-- MODAL 1: BİLDİRİM İZİN PENCERESİ (Açılışta Sorar) -->
+  <!-- MODAL 1: BİLDİRİM İZİN PENCERESİ -->
   <div id="permission-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl border-2 border-sky-200">
       <div class="w-16 h-16 mx-auto bg-amber-100 rounded-2xl flex items-center justify-center text-4xl">🔔</div>
@@ -351,12 +355,10 @@
         <button onclick="closeCameraModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-600 font-bold">✕</button>
       </div>
 
-      <!-- Canlı Video Alanı -->
       <div class="relative rounded-2xl overflow-hidden bg-slate-900 aspect-square flex items-center justify-center">
         <video id="camera-video" autoplay playsinline muted class="w-full h-full object-cover"></video>
         <div class="scan-line"></div>
 
-        <!-- Hedef Çerçeve -->
         <div id="ai-target-box" class="absolute inset-8 border-2 border-dashed border-sky-400 rounded-2xl pointer-events-none transition-colors duration-200 flex items-end justify-center pb-2">
           <span id="ai-live-status" class="bg-slate-900/80 text-white text-[11px] font-extrabold px-3 py-1 rounded-full">
             🤖 Yapay Zeka Hazırlanıyor...
@@ -390,7 +392,7 @@
         </p>
         <div class="pt-3 border-t border-amber-200 flex items-center justify-between text-xs font-bold text-slate-700">
           <span>📅 Tarih: <span id="cert-date"></span></span>
-          <span class="text-sky-700 font-extrabold">🩺 Onay: Dt. Sıla</span>
+          <span class="text-sky-700 font-extrabold">🦷 Onay: Stj. Dt. Sıla</span>
         </div>
       </div>
       <div class="flex gap-2">
@@ -403,8 +405,8 @@
   <!-- MODAL 5: HEKİM PIN GİRİŞİ (1884) -->
   <div id="doctor-pin-modal" class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-xs w-full p-6 text-center space-y-4 shadow-2xl">
-      <div class="text-3xl">🩺🔐</div>
-      <h3 class="text-lg font-extrabold text-slate-800">Dt. Sıla Hekim Girişi</h3>
+      <div class="text-3xl">🦷🔐</div>
+      <h3 class="text-lg font-extrabold text-slate-800">Stj. Dt. Sıla Hekim Girişi</h3>
       <input id="doctor-pin-input" type="password" maxlength="4" placeholder="••••"
         class="w-full py-3 rounded-2xl border-2 border-sky-200 text-center font-extrabold text-xl tracking-[0.5em] focus:border-sky-500 focus:outline-none" />
       <p id="doctor-pin-error" class="text-xs font-bold text-rose-500 hidden">Hatalı Hekim PIN Kodu!</p>
@@ -415,20 +417,18 @@
     </div>
   </div>
 
-  <!-- MODAL 6: DT. SILA CANLI HEKİM KONTROL PANELİ -->
+  <!-- MODAL 6: STJ. DT. SILA CANLI HEKİM KONTROL PANELİ -->
   <div id="doctor-dashboard-modal" class="hidden fixed inset-0 z-50 bg-slate-100 overflow-y-auto p-4">
     <div class="max-w-2xl mx-auto space-y-4 pb-12">
 
-      <!-- Üst Başlık -->
       <div class="bg-white rounded-3xl p-4 shadow-sm border border-sky-100 flex items-center justify-between">
         <div>
-          <h2 class="text-lg font-extrabold text-sky-800">🩺 Dt. Sıla Klinik Kontrol Paneli</h2>
+          <h2 class="text-lg font-extrabold text-sky-800">🦷 Stj. Dt. Sıla Klinik Kontrol Paneli</h2>
           <p class="text-xs font-semibold text-slate-500">Dosya No & Şifre Eşleştirme • Canlı Takip • Not Gönderme</p>
         </div>
         <button onclick="closeDoctorDashboard()" class="px-3.5 py-2 rounded-xl bg-rose-50 text-rose-600 font-extrabold text-xs">✕ Kapat</button>
       </div>
 
-      <!-- Hekim Test Modu & Firebase Bulut Ayarı -->
       <div class="bg-white rounded-3xl p-4 shadow-sm border border-sky-100 space-y-3">
         <div class="flex items-center justify-between">
           <div>
@@ -466,7 +466,7 @@
         </div>
       </div>
 
-      <!-- YENİ HASTA KAYDI (Dosya No Gir -> Otomatik 4 Haneli Şifre Üret) -->
+      <!-- YENİ HASTA KAYDI -->
       <div class="bg-white rounded-3xl p-4 shadow-sm border border-emerald-200 space-y-3">
         <h3 class="text-sm font-extrabold text-emerald-800">➕ Yeni Hasta Kaydı Oluştur (Zero-PII)</h3>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -498,20 +498,22 @@
   </div>
 
   <script>
-    // ==================== PWA MANIFEST & SERVICE WORKER OLUŞTURUCU ====================
-    (function initPWA() {
-      const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="110" fill="#0284c7"/><text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" font-size="280">🦷</text></svg>`;
-      const iconUrl = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgIcon)));
-      document.getElementById('apple-touch-icon').href = iconUrl;
+    // ==================== PWA MANIFEST & SENİN ÖZEL LOGON (logo.jpg) ====================
+    (function initCustomLogoPWA() {
+      const baseUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
+      const logoFullUrl = baseUrl + 'logo.jpg';
 
       const manifest = {
         name: "Plak Avcısı: Kral Mutans'a Karşı",
         short_name: "Plak Avcısı",
-        start_url: ".",
+        start_url: baseUrl || ".",
         display: "standalone",
-        background_color: "#e0f2fe",
-        theme_color: "#0284c7",
-        icons: [{ src: iconUrl, sizes: "512x512", type: "image/svg+xml", purpose: "any maskable" }]
+        background_color: "#9db6c4",
+        theme_color: "#7c9eb2",
+        icons: [
+          { src: logoFullUrl, sizes: "512x512", type: "image/jpeg", purpose: "any" },
+          { src: logoFullUrl, sizes: "512x512", type: "image/jpeg", purpose: "maskable" }
+        ]
       };
       const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
       document.getElementById('pwa-manifest').href = URL.createObjectURL(manifestBlob);
@@ -554,14 +556,14 @@
       }
     }
 
-    // ==================== UYGULAMA VERİ MODELİ & SABİTLER ====================
+    // ==================== SENİN SEÇTİĞİN 6 ÖZEL KAHRAMAN KARAKTERİ ====================
     const HEROES = [
-      { id: 'lion', emoji: '🦁', name: 'Cesur Aslan' },
-      { id: 'unicorn', emoji: '🦄', name: 'Işık Boynuz' },
-      { id: 'astronaut', emoji: '🧑‍🚀', name: 'Uzay Kaptanı' },
-      { id: 'fox', emoji: '🦊', name: 'Hızlı Tilki' },
-      { id: 'dino', emoji: '🦖', name: 'Diş Dino' },
-      { id: 'cat', emoji: '🐱', name: 'Süper Kedi' }
+      { id: 'unicorn', emoji: '🦄', name: 'Tek boynuzlu at' },
+      { id: 'princess', emoji: '👸', name: 'Prenses' },
+      { id: 'fairy', emoji: '🧚‍♀️', name: 'Peri Kızı' },
+      { id: 'prince', emoji: '🤴', name: 'Prens' },
+      { id: 'knight', emoji: '🤺', name: 'Şövalye' },
+      { id: 'car', emoji: '🏎️', name: 'Yarış arabası' }
     ];
 
     const DOCTOR_PIN = '1884';
@@ -577,7 +579,6 @@
     let aiVerifiedBrush = false;
     let aiDetectedPerson = false;
 
-    // ==================== BAŞLANGIÇ ====================
     window.addEventListener('DOMContentLoaded', () => {
       renderHeroSelection();
       updateCloudBadge();
@@ -595,7 +596,6 @@
         });
       }
 
-      // Her 30 saniyede bir sabah/akşam hatırlatıcı saatini kontrol et
       setInterval(checkScheduledReminders, 30000);
     });
 
@@ -615,7 +615,7 @@
       renderHeroSelection();
     }
 
-    // ==================== VERİTABANI KATMANI (YEREL + FIREBASE BULUT) ====================
+    // ==================== VERİTABANI KATMANI ====================
     function getLocalPatients() {
       return JSON.parse(localStorage.getItem('plak_patients_db') || '{}');
     }
@@ -663,7 +663,7 @@
       return db[pin] || null;
     }
 
-    // ==================== HASTA GİRİŞ AKIŞI (SADECE İSİM + ŞİFRE) ====================
+    // ==================== HASTA GİRİŞ AKIŞI ====================
     async function handlePatientLogin() {
       const nameInput = document.getElementById('login-name').value.trim();
       const pinInput = document.getElementById('login-pin').value.trim();
@@ -671,7 +671,7 @@
       errEl.classList.add('hidden');
 
       if (!nameInput || pinInput.length !== 4) {
-        errEl.innerText = 'Lütfen kahraman adını ve Dt. Sıla’nın verdiği 4 haneli şifreyi eksiksiz gir!';
+        errEl.innerText = 'Lütfen kahraman adını ve Stj. Dt. Sıla’nın verdiği 4 haneli şifreyi eksiksiz gir!';
         errEl.classList.remove('hidden');
         return;
       }
@@ -679,8 +679,7 @@
       let patient = await loadPatientByPin(pinInput);
 
       if (!patient) {
-        // Eğer hekim ön kaydı bulut üzerinden henüz eşleşmediyse veya yeni şifre ise
-        errEl.innerText = 'Bu 4 haneli şifre bulunamadı. Dt. Sıla’nın verdiği şifreyi kontrol et!';
+        errEl.innerText = 'Bu 4 haneli şifre bulunamadı. Stj. Dt. Sıla’nın verdiği şifreyi kontrol et!';
         errEl.classList.remove('hidden');
         return;
       }
@@ -700,7 +699,6 @@
       document.getElementById('game-screen').classList.remove('hidden');
       updateGameUI();
 
-      // Açılışta bildirim izni sor (daha önce sorulmadıysa)
       if ('Notification' in window && Notification.permission === 'default' && !localStorage.getItem('plak_notif_asked')) {
         setTimeout(() => {
           document.getElementById('permission-modal').classList.remove('hidden');
@@ -730,7 +728,6 @@
       document.getElementById('streak-count').innerText = currentPatient.streak || 0;
       document.getElementById('xp-count').innerText = currentPatient.xp || 0;
 
-      // Hekim Notu Bannerı
       const noteBanner = document.getElementById('doctor-note-banner');
       if (currentPatient.doctorNote) {
         document.getElementById('doctor-note-text').innerText = currentPatient.doctorNote;
@@ -739,7 +736,6 @@
         noteBanner.classList.add('hidden');
       }
 
-      // Boss HP
       const maxHp = (currentPatient.targetDays || 14) * 100;
       const currentHp = Math.max(0, currentPatient.bossHp ?? maxHp);
       const pct = Math.round((currentHp / maxHp) * 100);
@@ -758,7 +754,6 @@
         document.getElementById('victory-cert-btn').classList.add('hidden');
       }
 
-      // Günlük tamamlanan saldırılar
       const today = getTodayStr();
       const logs = currentPatient.dailyLogs?.[today] || {};
       document.getElementById('badge-morning-done').classList.toggle('hidden', !logs.morning);
@@ -856,7 +851,7 @@
       const icsContent = [
         'BEGIN:VCALENDAR',
         'VERSION:2.0',
-        'PRODID:-//Dt. Sila//Plak Avcisi//TR',
+        'PRODID:-//Stj. Dt. Sila//Plak Avcisi//TR',
         'BEGIN:VEVENT',
         `DTSTART:${dateStamp}T${mTime}`,
         'RRULE:FREQ=DAILY',
@@ -1001,7 +996,6 @@
         }
       }
 
-      // 140x140 düşük boyutlu güvenli kanıt önizlemesi oluştur
       const video = document.getElementById('camera-video');
       const canvas = document.getElementById('capture-canvas');
       canvas.width = 140;
@@ -1049,7 +1043,6 @@
         currentPatient.photos = currentPatient.photos.slice(0, 8);
       }
 
-      // Canavar Hasar Animasyonu
       const monsterEl = document.getElementById('monster-emoji');
       const dmgPopup = document.getElementById('damage-popup');
       monsterEl.classList.add('animate-shake');
@@ -1070,7 +1063,7 @@
       document.getElementById('certificate-modal').classList.remove('hidden');
     }
 
-    // ==================== DT. SILA HEKİM PANELİ (PIN: 1884) ====================
+    // ==================== STJ. DT. SILA HEKİM PANELİ (PIN: 1884) ====================
     function openDoctorPinModal() {
       document.getElementById('doctor-pin-input').value = '';
       document.getElementById('doctor-pin-error').classList.add('hidden');
@@ -1140,7 +1133,7 @@
         pin: newPin,
         fileNo: fileNo,
         nickname: 'Henüz Giriş Yapmadı',
-        heroId: 'lion',
+        heroId: 'unicorn',
         targetDays: targetDays,
         bossHp: targetDays * 100,
         streak: 0,
@@ -1203,7 +1196,6 @@
               <span>🔥 ${p.streak || 0} Gün | Canavar: %${pct} HP</span>
             </div>
 
-            <!-- 3 HAZIR + KİŞİSELLEŞTİRİLEBİLİR NOT GÖNDERME -->
             <div class="pt-2 border-t border-slate-200 space-y-1.5">
               <p class="text-[11px] font-extrabold text-slate-600">💌 Hastaya Not Gönder (Hazır Seç veya Düzenle):</p>
               <div class="flex flex-wrap gap-1.5">
