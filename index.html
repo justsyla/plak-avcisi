@@ -157,9 +157,72 @@
           <span class="text-slate-500">Hedef: <span id="target-days-label">14</span> Gün</span>
         </div>
 
-        <div id="monster-container" class="my-3 relative inline-block">
-          <div id="monster-emoji" class="text-7xl sm:text-8xl animate-float cursor-pointer transition-transform">🦠</div>
-          <div id="damage-popup" class="hidden absolute -top-2 -right-6 bg-rose-500 text-white font-game font-extrabold text-sm px-2.5 py-1 rounded-full shadow-lg">
+        <div id="monster-container" class="my-2 relative inline-block">
+          <div id="monster-visual" class="w-36 h-36 mx-auto animate-float cursor-pointer transition-transform">
+            <!-- Özel Çizim Taçlı Kral Mutans SVG -->
+            <svg id="kral-mutans-svg" viewBox="0 0 200 200" class="w-full h-full drop-shadow-lg">
+              <!-- Asit Baloncukları -->
+              <circle cx="28" cy="68" r="7" fill="#a3e635" opacity="0.85"/>
+              <circle cx="174" cy="62" r="8" fill="#a3e635" opacity="0.85"/>
+              <circle cx="164" cy="148" r="6" fill="#c084fc" opacity="0.8"/>
+              <circle cx="34" cy="144" r="6" fill="#c084fc" opacity="0.8"/>
+
+              <!-- Bakteri Kamçıları / Kolları -->
+              <path d="M42 108 Q16 92 22 76" stroke="#7e22ce" stroke-width="9" stroke-linecap="round" fill="none"/>
+              <path d="M158 108 Q184 92 178 76" stroke="#7e22ce" stroke-width="9" stroke-linecap="round" fill="none"/>
+              <path d="M62 162 Q48 184 36 178" stroke="#6b21a8" stroke-width="9" stroke-linecap="round" fill="none"/>
+              <path d="M138 162 Q152 184 164 178" stroke="#6b21a8" stroke-width="9" stroke-linecap="round" fill="none"/>
+
+              <!-- Ana Mor Bakteri Gövdesi -->
+              <path d="M100 44 C136 44 164 68 164 106 C164 146 138 170 100 170 C62 170 36 146 36 106 C36 68 64 44 100 44 Z" fill="url(#mutansGrad)" stroke="#581c87" stroke-width="4"/>
+
+              <!-- Gövde Benekleri -->
+              <circle cx="56" cy="92" r="7" fill="#6b21a8" opacity="0.45"/>
+              <circle cx="144" cy="96" r="8" fill="#6b21a8" opacity="0.45"/>
+              <circle cx="66" cy="146" r="6" fill="#6b21a8" opacity="0.45"/>
+              <circle cx="136" cy="144" r="6" fill="#6b21a8" opacity="0.45"/>
+
+              <!-- Altın Kral Tacı -->
+              <polygon points="66,48 74,20 90,38 100,14 110,38 126,20 134,48" fill="#facc15" stroke="#ca8a04" stroke-width="3" stroke-linejoin="round"/>
+              <circle cx="100" cy="36" r="4" fill="#ef4444"/>
+              <circle cx="80" cy="40" r="3" fill="#22c55e"/>
+              <circle cx="120" cy="40" r="3" fill="#3b82f6"/>
+
+              <!-- Gözler (Can azalınca değişir) -->
+              <g id="mutans-eyes-normal">
+                <circle cx="78" cy="98" r="14" fill="#fef08a" stroke="#581c87" stroke-width="3"/>
+                <circle cx="122" cy="98" r="14" fill="#fef08a" stroke="#581c87" stroke-width="3"/>
+                <circle cx="81" cy="99" r="6" fill="#dc2626"/>
+                <circle cx="119" cy="99" r="6" fill="#dc2626"/>
+                <!-- Kızgın Kaşlar -->
+                <path d="M62 80 L92 90" stroke="#3b0764" stroke-width="6" stroke-linecap="round"/>
+                <path d="M138 80 L108 90" stroke="#3b0764" stroke-width="6" stroke-linecap="round"/>
+              </g>
+
+              <g id="mutans-eyes-hurt" class="hidden">
+                <path d="M68 90 L88 106 M88 90 L68 106" stroke="#fef08a" stroke-width="5" stroke-linecap="round"/>
+                <path d="M112 90 L132 106 M132 90 L112 106" stroke="#fef08a" stroke-width="5" stroke-linecap="round"/>
+                <!-- Ter Damlaları -->
+                <path d="M150 72 Q156 84 150 88 Q144 84 150 72 Z" fill="#38bdf8"/>
+                <path d="M48 76 Q54 88 48 92 Q42 88 48 76 Z" fill="#38bdf8"/>
+              </g>
+
+              <!-- Sivri Dişli Ağız -->
+              <path d="M68 128 Q100 148 132 128 Q122 154 100 154 Q78 154 68 128 Z" fill="#4c0519"/>
+              <polygon points="78,131 84,142 90,132" fill="#ffffff"/>
+              <polygon points="110,132 116,142 122,131" fill="#ffffff"/>
+              <polygon points="94,149 100,139 106,149" fill="#ffffff"/>
+
+              <defs>
+                <radialGradient id="mutansGrad" cx="40%" cy="35%" r="65%">
+                  <stop offset="0%" stop-color="#c084fc"/>
+                  <stop offset="55%" stop-color="#9333ea"/>
+                  <stop offset="100%" stop-color="#581c87"/>
+                </radialGradient>
+              </defs>
+            </svg>
+          </div>
+          <div id="damage-popup" class="hidden absolute -top-1 -right-4 bg-rose-500 text-white font-game font-extrabold text-sm px-2.5 py-1 rounded-full shadow-lg">
             -50 HP!
           </div>
         </div>
@@ -627,12 +690,25 @@
       document.getElementById('boss-hp-text').innerText = `${currentHp} / ${maxHp}`;
       document.getElementById('boss-percent').innerText = pct;
 
+      const mutansSvg = document.getElementById('kral-mutans-svg');
+      const eyesNormal = document.getElementById('mutans-eyes-normal');
+      const eyesHurt = document.getElementById('mutans-eyes-hurt');
+
       if (currentHp <= 0) {
-        document.getElementById('monster-emoji').innerText = '🏳️';
+        mutansSvg.style.opacity = '0.35';
+        mutansSvg.style.transform = 'scale(0.8) rotate(12deg)';
+        eyesNormal.classList.add('hidden');
+        eyesHurt.classList.remove('hidden');
         document.getElementById('monster-taunt').innerText = 'Tebrikler! Kral Mutans teslim oldu!';
         document.getElementById('victory-cert-btn').classList.remove('hidden');
       } else {
-        document.getElementById('monster-emoji').innerText = pct > 50 ? '🦠' : '🤕';
+        mutansSvg.style.opacity = '1';
+        mutansSvg.style.transform = pct <= 50 ? 'scale(0.92)' : 'scale(1)';
+        eyesNormal.classList.toggle('hidden', pct <= 50);
+        eyesHurt.classList.toggle('hidden', pct > 50);
+        document.getElementById('monster-taunt').innerText = pct <= 50
+          ? '"Eyvah! Fırça darbeleri gücümü eritiyor!"'
+          : '"Dişlerini fırçalamazsan kaleler kuracağım!"';
         document.getElementById('victory-cert-btn').classList.add('hidden');
       }
 
@@ -842,7 +918,7 @@
         currentPatient.photos = currentPatient.photos.slice(0, 8);
       }
 
-      const monsterEl = document.getElementById('monster-emoji');
+      const monsterEl = document.getElementById('monster-visual');
       const dmgPopup = document.getElementById('damage-popup');
       monsterEl.classList.add('animate-shake');
       dmgPopup.innerText = `-${damage} HP!`;
