@@ -72,11 +72,11 @@
       </div>
     </div>
     <div class="flex items-center gap-2">
-      <span id="cloud-status-badge" class="hidden sm:inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">
-        💾 Yerel Mod
+      <span id="cloud-status-badge" class="hidden sm:inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700">
+        ☁️ Canlı Bulut
       </span>
       <button onclick="openDoctorPinModal()" class="text-xs font-bold bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-200 px-3 py-1.5 rounded-xl transition flex items-center gap-1">
-        🦷 Dt. Sıla Paneli
+        🦷 Stj. Dt. Sıla Paneli
       </button>
     </div>
   </header>
@@ -370,7 +370,7 @@
         <div>
           <label class="block text-xs font-extrabold text-slate-700 mb-1">☁️ Canlı Bulut Veritabanı URL (Firebase Realtime DB)</label>
           <div class="flex gap-2">
-            <input id="firebase-url-input" type="url" placeholder="https://plak-avcisi-xxxx-default-rtdb.firebaseio.com"
+            <input id="firebase-url-input" type="url" placeholder="https://plak-avcisi-default-rtdb.europe-west1.firebasedatabase.app"
               class="flex-1 px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold" />
             <button onclick="saveFirebaseUrl()" class="px-3.5 py-2 rounded-xl bg-sky-600 text-white font-extrabold text-xs">Bağla</button>
           </div>
@@ -420,6 +420,8 @@
   </div>
 
   <script>
+    const DEFAULT_FIREBASE_URL = 'https://plak-avcisi-default-rtdb.europe-west1.firebasedatabase.app';
+
     if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
       const swCode = `
         self.addEventListener('install', e => self.skipWaiting());
@@ -458,19 +460,19 @@
     }
 
     const HEROES = [
-      { id: 'unicorn', emoji: '🦄', name: 'Unicorn' },
+      { id: 'unicorn', emoji: '🦄', name: 'Tek boynuzlu at' },
       { id: 'princess', emoji: '👸', name: 'Prenses' },
       { id: 'fairy', emoji: '🧚‍♀️', name: 'Peri Kızı' },
       { id: 'prince', emoji: '🤴', name: 'Prens' },
       { id: 'knight', emoji: '🤺', name: 'Şövalye' },
-      { id: 'car', emoji: '🏎️', name: 'Araba' }
+      { id: 'car', emoji: '🏎️', name: 'Yarış arabası' }
     ];
 
     const DOCTOR_PIN = '1884';
     let selectedHero = HEROES[0];
     let currentPatient = null;
     let doctorTestMode = false;
-    let firebaseBaseUrl = localStorage.getItem('plak_firebase_url') || '';
+    let firebaseBaseUrl = localStorage.getItem('plak_firebase_url') || DEFAULT_FIREBASE_URL;
     let cocoModel = null;
     let cameraStream = null;
     let currentFacingMode = 'environment';
@@ -540,6 +542,21 @@
         } catch (err) {}
       }
       return getLocalPatients()[pin] || null;
+    }
+
+    async function syncAllPatientsFromCloud() {
+      if (!firebaseBaseUrl) return;
+      const db = getLocalPatients();
+      const pins = Object.keys(db);
+      const cleanUrl = firebaseBaseUrl.replace(/\/$/, '');
+      for (const pin of pins) {
+        try {
+          const res = await fetch(`${cleanUrl}/patients/${pin}.json`);
+          const data = await res.json();
+          if (data && data.pin) db[pin] = data;
+        } catch (e) {}
+      }
+      saveLocalPatients(db);
     }
 
     async function handlePatientLogin() {
@@ -852,6 +869,7 @@
       if (document.getElementById('doctor-pin-input').value.trim() === DOCTOR_PIN) {
         document.getElementById('doctor-pin-modal').classList.add('hidden');
         document.getElementById('doctor-dashboard-modal').classList.remove('hidden');
+        await syncAllPatientsFromCloud();
         await renderDoctorPatientList();
       } else {
         document.getElementById('doctor-pin-error').classList.remove('hidden');
