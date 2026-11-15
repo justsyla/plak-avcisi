@@ -7,20 +7,15 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Plak Avcısı" />
-  <title>Plak Avcısı: Kral Mutans'a Karşı | Stj. Dt. Sıla</title>
-  <link id="pwa-manifest" rel="manifest" href="" />
-  <link id="apple-touch-icon" rel="apple-touch-icon" href="logo.jpg" />
-  <link id="favicon-link" rel="icon" type="image/jpeg" href="logo.jpg" />
+  <title>Plak Avcısı: Kral Mutans'a Karşı | Stj. Dt. Sıla Bayram</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="Logo.jpg" />
+  <link rel="icon" type="image/jpeg" href="Logo.jpg" />
 
-  <!-- Türkçe Karakter Uyumlu Oyun Fontları -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
-
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- TensorFlow.js & COCO-SSD Gerçek Zamanlı Diş Fırçası & Yüz Engelleyici AI -->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0/dist/tf.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.3/dist/coco-ssd.min.js"></script>
 
@@ -33,13 +28,8 @@
       overflow-x: hidden;
       -webkit-tap-highlight-color: transparent;
     }
-    h1, h2, h3, .font-game {
-      font-family: 'Baloo 2', cursive;
-    }
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-8px); }
-    }
+    h1, h2, h3, .font-game { font-family: 'Baloo 2', cursive; }
+    @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
     @keyframes shake {
       0%, 100% { transform: translateX(0); }
       20% { transform: translateX(-10px) rotate(-3deg); }
@@ -47,18 +37,11 @@
       60% { transform: translateX(-8px); }
       80% { transform: translateX(8px); }
     }
-    @keyframes scanline {
-      0% { top: 5%; }
-      50% { top: 90%; }
-      100% { top: 5%; }
-    }
+    @keyframes scanline { 0% { top: 5%; } 50% { top: 90%; } 100% { top: 5%; } }
     .animate-float { animation: float 3s ease-in-out infinite; }
     .animate-shake { animation: shake 0.45s ease-in-out; }
     .scan-line {
-      position: absolute;
-      left: 5%;
-      width: 90%;
-      height: 3px;
+      position: absolute; left: 5%; width: 90%; height: 3px;
       background: linear-gradient(90deg, transparent, #10b981, transparent);
       box-shadow: 0 0 12px #10b981;
       animation: scanline 2.2s linear infinite;
@@ -72,27 +55,20 @@
     @media print {
       body * { visibility: hidden; }
       #certificate-area, #certificate-area * { visibility: visible; }
-      #certificate-area {
-        position: fixed;
-        left: 0;
-        top: 0;
-        width: 100%;
-        box-shadow: none !important;
-      }
+      #certificate-area { position: fixed; left: 0; top: 0; width: 100%; box-shadow: none !important; }
     }
   </style>
 </head>
 <body class="pb-24 select-none">
 
-  <!-- Üst Menü Barı -->
   <header class="sticky top-0 z-30 bg-white/85 backdrop-blur-md border-b border-sky-100 px-4 py-3 flex items-center justify-between shadow-sm">
     <div class="flex items-center gap-2.5">
-      <img src="logo.jpg" onerror="this.style.display='none'; document.getElementById('fallback-hdr-icon').style.display='inline-block';"
+      <img src="Logo.jpg" onerror="this.style.display='none'; document.getElementById('fallback-hdr-icon').style.display='inline-block';"
            alt="Plak Avcısı Logo" class="w-10 h-10 rounded-xl object-cover shadow-sm border border-sky-200" />
       <span id="fallback-hdr-icon" class="hidden text-2xl">🦷</span>
       <div>
         <h1 class="text-lg sm:text-xl font-extrabold text-sky-700 leading-none">PLAK AVCISI</h1>
-        <p class="text-[11px] font-bold text-emerald-600">Stj. Dt. Sıla Klinik Görevi</p>
+        <p class="text-[11px] font-bold text-emerald-600">Stj. Dt. Sıla Bayram</p>
       </div>
     </div>
     <div class="flex items-center gap-2">
@@ -100,27 +76,23 @@
         💾 Yerel Mod
       </span>
       <button onclick="openDoctorPinModal()" class="text-xs font-bold bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-200 px-3 py-1.5 rounded-xl transition flex items-center gap-1">
-        🦷 Stj. Dt. Sıla Paneli
+        🦷 Dt. Sıla Paneli
       </button>
     </div>
   </header>
 
-  <!-- ANA KONTEYNER -->
   <main class="max-w-lg mx-auto px-4 pt-5">
-
-    <!-- 1. GİRİŞ / KAYIT EKRANI (Sadece İsim + Şifre) -->
     <section id="login-screen" class="glass-card rounded-3xl p-6 text-center space-y-5">
-      <!-- Özel Uygulama Logosu (logo.jpg) -->
       <div class="w-32 h-32 mx-auto rounded-3xl overflow-hidden shadow-xl shadow-sky-200/80 border-2 border-white animate-float bg-[#9db6c4] flex items-center justify-center">
-        <img src="logo.jpg" onerror="this.style.display='none'; document.getElementById('fallback-hero-tooth').style.display='flex';"
-             alt="Plak Avcısı Stj. Dt. Sıla" class="w-full h-full object-cover" />
+        <img src="Logo.jpg" onerror="this.style.display='none'; document.getElementById('fallback-hero-tooth').style.display='flex';"
+             alt="Plak Avcısı Stj. Dt. Sıla Bayram" class="w-full h-full object-cover" />
         <div id="fallback-hero-tooth" class="hidden w-full h-full items-center justify-center text-5xl">🦷</div>
       </div>
 
       <div>
         <h2 class="text-2xl font-extrabold text-slate-800">Kral Mutans'a Karşı!</h2>
         <p class="text-sm text-slate-600 mt-1 font-medium">
-          Stj. Dt. Sıla'nın sana verdiği <strong>4 haneli şifreyi</strong> ve kahraman adını gir, göreve başla!
+          Dt. Sıla'nın sana verdiği <strong>4 haneli şifreyi</strong> ve kahraman adını gir, göreve başla!
         </p>
       </div>
 
@@ -130,15 +102,13 @@
           <input id="login-name" type="text" maxlength="20" placeholder="Örn: Mert veya SüperKahraman"
             class="w-full px-4 py-3 rounded-2xl border-2 border-sky-100 focus:border-sky-400 focus:outline-none font-bold text-slate-800 bg-white" />
         </div>
-
         <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1 ml-1">🔑 Stj. Dt. Sıla'nın Verdiği 4 Haneli Şifre</label>
+          <label class="block text-xs font-bold text-slate-600 mb-1 ml-1">🔑 Dt. Sıla'nın Verdiği 4 Haneli Şifre</label>
           <input id="login-pin" type="tel" maxlength="4" placeholder="Örn: 4821"
             class="w-full px-4 py-3 rounded-2xl border-2 border-sky-100 focus:border-sky-400 focus:outline-none font-extrabold text-center tracking-[0.4em] text-lg text-sky-700 bg-white" />
         </div>
       </div>
 
-      <!-- Kahraman Seçimi (Unicorn, Prenses, Peri Kızı, Prens, Şövalye, Araba) -->
       <div class="text-left">
         <label class="block text-xs font-bold text-slate-600 mb-2 ml-1">✨ Ajan Karakterini Seç</label>
         <div id="hero-grid" class="grid grid-cols-3 gap-2"></div>
@@ -148,23 +118,18 @@
         class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-sky-500 to-emerald-500 hover:from-sky-600 hover:to-emerald-600 text-white font-game text-lg font-extrabold shadow-lg shadow-sky-200 active:scale-95 transition">
         🚀 Göreve Başla!
       </button>
-
       <p id="login-error" class="text-xs font-bold text-rose-500 hidden"></p>
     </section>
 
-    <!-- 2. AKTİF OYUN EKRANI -->
     <section id="game-screen" class="hidden space-y-4">
-
-      <!-- Stj. Dt. Sıla'dan Gelen Özel Hekim Notu Banner'ı -->
       <div id="doctor-note-banner" class="hidden rounded-2xl p-4 bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-300 shadow-sm flex items-start gap-3">
         <span class="text-2xl">💌</span>
         <div class="flex-1">
-          <p class="text-[11px] font-extrabold uppercase tracking-wider text-amber-700">Stj. Dt. Sıla'dan Sana Mesaj Var!</p>
+          <p class="text-[11px] font-extrabold uppercase tracking-wider text-amber-700">Dt. Sıla'dan Sana Mesaj Var!</p>
           <p id="doctor-note-text" class="text-sm font-bold text-slate-800 mt-0.5"></p>
         </div>
       </div>
 
-      <!-- Oyuncu Üst Bilgi Kartı -->
       <div class="glass-card rounded-3xl p-4 flex items-center justify-between">
         <div class="flex items-center gap-3">
           <div id="player-avatar-badge" class="w-14 h-14 rounded-2xl bg-sky-100 flex items-center justify-center text-3xl shadow-inner">🦄</div>
@@ -186,7 +151,6 @@
         </div>
       </div>
 
-      <!-- KRAL MUTANS BOSS ARENASI -->
       <div class="glass-card rounded-3xl p-5 text-center relative overflow-hidden">
         <div class="flex items-center justify-between text-xs font-extrabold mb-2">
           <span class="px-2.5 py-1 rounded-full bg-rose-100 text-rose-600">👾 BÖLÜM SONU CANAVARI</span>
@@ -204,8 +168,7 @@
         <p id="monster-taunt" class="text-xs font-bold text-slate-500 mb-3">"Dişlerini fırçalamazsan kaleler kuracağım!"</p>
 
         <div class="w-full bg-slate-200 rounded-full h-5 p-0.5 overflow-hidden shadow-inner">
-          <div id="boss-hp-bar" class="h-full rounded-full bg-gradient-to-r from-rose-500 to-orange-400 transition-all duration-500 flex items-center justify-end pr-2" style="width: 100%;">
-          </div>
+          <div id="boss-hp-bar" class="h-full rounded-full bg-gradient-to-r from-rose-500 to-orange-400 transition-all duration-500 flex items-center justify-end pr-2" style="width: 100%;"></div>
         </div>
         <div class="flex justify-between text-xs font-extrabold mt-1.5 px-1">
           <span class="text-rose-600">Canavar Gücü: <span id="boss-hp-text">1400 / 1400</span> HP</span>
@@ -218,7 +181,6 @@
         </button>
       </div>
 
-      <!-- SABAH & AKŞAM ANA SALDIRI BUTONLARI -->
       <div class="grid grid-cols-2 gap-3">
         <button id="btn-morning-attack" onclick="startBrushVerification('morning')"
           class="p-4 rounded-3xl bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-lg shadow-orange-200 active:scale-95 transition text-left relative overflow-hidden">
@@ -237,7 +199,6 @@
         </button>
       </div>
 
-      <!-- GÜNLÜK SÜPER GÜÇLER -->
       <div class="glass-card rounded-3xl p-4 space-y-2.5">
         <div class="flex items-center justify-between">
           <h3 class="text-sm font-extrabold text-slate-700">⚡ Günlük Süper Güçler (+15 HP Hasar)</h3>
@@ -266,14 +227,12 @@
           </button>
         </div>
       </div>
-
     </section>
   </main>
 
-  <!-- PWA TELEFONA UYGULAMA OLARAK YÜKLEME ÇUBUĞU -->
   <div id="pwa-install-banner" class="hidden fixed bottom-3 left-3 right-3 z-40 max-w-lg mx-auto bg-slate-900 text-white rounded-2xl p-3.5 shadow-2xl border border-slate-700 flex items-center justify-between gap-3">
     <div class="flex items-center gap-2.5">
-      <img src="logo.jpg" onerror="this.style.display='none'" class="w-9 h-9 rounded-xl object-cover" />
+      <img src="Logo.jpg" onerror="this.style.display='none'" class="w-9 h-9 rounded-xl object-cover" />
       <div>
         <p class="text-xs font-extrabold text-sky-300">Uygulamayı Ana Ekrana Ekle</p>
         <p id="pwa-install-desc" class="text-[11px] text-slate-300">Tek dokunuşla açmak ve bildirim almak için yükle!</p>
@@ -287,7 +246,7 @@
     </div>
   </div>
 
-  <!-- MODAL 1: BİLDİRİM İZİN PENCERESİ -->
+  <!-- MODALLAR -->
   <div id="permission-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl border-2 border-sky-200">
       <div class="w-16 h-16 mx-auto bg-amber-100 rounded-2xl flex items-center justify-center text-4xl">🔔</div>
@@ -299,52 +258,37 @@
         hatırlatması göndereceğiz.
       </p>
       <div class="grid grid-cols-2 gap-2 pt-1">
-        <button onclick="declineNotifications()" class="py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-xs">
-          Şimdi Değil
-        </button>
-        <button onclick="acceptNotifications()" class="py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-xs shadow-md">
-          ✅ Evet, İzin Ver
-        </button>
+        <button onclick="declineNotifications()" class="py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-xs">Şimdi Değil</button>
+        <button onclick="acceptNotifications()" class="py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-xs shadow-md">✅ Evet, İzin Ver</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL 2: HATIRLATICI & TELEFON TAKVİM ALARMI -->
   <div id="reminder-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-sm w-full p-5 space-y-4 shadow-2xl">
       <div class="flex items-center justify-between">
         <h3 class="text-lg font-extrabold text-slate-800">🔔 Fırçalama Hatırlatıcısı</h3>
         <button onclick="closeReminderModal()" class="text-slate-400 hover:text-slate-700 font-bold">✕</button>
       </div>
-
       <div class="space-y-2.5 bg-sky-50 p-3.5 rounded-2xl border border-sky-100">
         <div class="flex items-center justify-between">
           <span class="text-xs font-bold text-slate-700">☀️ Sabah Hatırlatıcı:</span>
           <input id="morning-time-input" type="time" value="07:30" class="px-2 py-1 rounded-lg border border-sky-200 text-xs font-extrabold text-sky-700 bg-white" />
         </div>
         <p class="text-[11px] text-amber-700 font-bold">"Bugün dişini fırçalamayı unutma!"</p>
-
         <hr class="border-sky-200/60" />
-
         <div class="flex items-center justify-between">
           <span class="text-xs font-bold text-slate-700">🌙 Akşam Hatırlatıcı:</span>
           <input id="evening-time-input" type="time" value="21:00" class="px-2 py-1 rounded-lg border border-sky-200 text-xs font-extrabold text-indigo-700 bg-white" />
         </div>
         <p class="text-[11px] text-indigo-700 font-bold">"Yatmadan dişini fırçala bakalım!"</p>
       </div>
-
-      <button onclick="saveAndTestNotifications()" class="w-full py-3 rounded-2xl bg-sky-500 hover:bg-sky-600 text-white font-extrabold text-xs shadow-md">
-        🔔 Kaydet & Test Bildirimi Gönder
-      </button>
-
-      <button onclick="downloadCalendarAlarm()" class="w-full py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-xs shadow-md">
-        📅 Telefona Günlük Takvim Alarmı Kur (.ics)
-      </button>
+      <button onclick="saveAndTestNotifications()" class="w-full py-3 rounded-2xl bg-sky-500 hover:bg-sky-600 text-white font-extrabold text-xs shadow-md">🔔 Kaydet & Test Bildirimi Gönder</button>
+      <button onclick="downloadCalendarAlarm()" class="w-full py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-xs shadow-md">📅 Telefona Günlük Takvim Alarmı Kur (.ics)</button>
       <p class="text-[10px] text-slate-400 text-center">Takvim alarmı internet kapalı olsa bile her gün sabah-akşam telefonunda çalar.</p>
     </div>
   </div>
 
-  <!-- MODAL 3: YÜZ ENGELLEYİCİ & YAPAY ZEKA DİŞ FIRÇASI KAMERASI -->
   <div id="camera-modal" class="hidden fixed inset-0 z-50 bg-slate-950/90 flex flex-col items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-sm w-full p-4 space-y-3 shadow-2xl">
       <div class="flex items-center justify-between">
@@ -354,33 +298,21 @@
         </div>
         <button onclick="closeCameraModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-600 font-bold">✕</button>
       </div>
-
       <div class="relative rounded-2xl overflow-hidden bg-slate-900 aspect-square flex items-center justify-center">
         <video id="camera-video" autoplay playsinline muted class="w-full h-full object-cover"></video>
         <div class="scan-line"></div>
-
         <div id="ai-target-box" class="absolute inset-8 border-2 border-dashed border-sky-400 rounded-2xl pointer-events-none transition-colors duration-200 flex items-end justify-center pb-2">
-          <span id="ai-live-status" class="bg-slate-900/80 text-white text-[11px] font-extrabold px-3 py-1 rounded-full">
-            🤖 Yapay Zeka Hazırlanıyor...
-          </span>
+          <span id="ai-live-status" class="bg-slate-900/80 text-white text-[11px] font-extrabold px-3 py-1 rounded-full">🤖 Yapay Zeka Hazırlanıyor...</span>
         </div>
       </div>
-
       <canvas id="capture-canvas" class="hidden"></canvas>
-
       <div class="flex gap-2">
-        <button onclick="switchCameraFacing()" class="px-3.5 py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs">
-          🔄 Çevir
-        </button>
-        <button id="btn-capture-proof" onclick="captureAndAttack()"
-          class="flex-1 py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-game font-extrabold text-base shadow-lg">
-          ⚡ Fırçayı Doğrula ve Vur!
-        </button>
+        <button onclick="switchCameraFacing()" class="px-3.5 py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs">🔄 Çevir</button>
+        <button id="btn-capture-proof" onclick="captureAndAttack()" class="flex-1 py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-game font-extrabold text-base shadow-lg">⚡ Fırçayı Doğrula ve Vur!</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL 4: ZAFER SERTİFİKASI -->
   <div id="certificate-modal" class="hidden fixed inset-0 z-50 bg-slate-900/75 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-md w-full p-5 space-y-4 shadow-2xl">
       <div id="certificate-area" class="p-6 rounded-2xl border-4 border-amber-400 bg-gradient-to-b from-amber-50 via-white to-sky-50 text-center space-y-3">
@@ -392,7 +324,7 @@
         </p>
         <div class="pt-3 border-t border-amber-200 flex items-center justify-between text-xs font-bold text-slate-700">
           <span>📅 Tarih: <span id="cert-date"></span></span>
-          <span class="text-sky-700 font-extrabold">🦷 Onay: Stj. Dt. Sıla</span>
+          <span class="text-sky-700 font-extrabold">🦷 Onay: Stj. Dt. Sıla Bayram</span>
         </div>
       </div>
       <div class="flex gap-2">
@@ -402,11 +334,10 @@
     </div>
   </div>
 
-  <!-- MODAL 5: HEKİM PIN GİRİŞİ (1884) -->
   <div id="doctor-pin-modal" class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-xs w-full p-6 text-center space-y-4 shadow-2xl">
       <div class="text-3xl">🦷🔐</div>
-      <h3 class="text-lg font-extrabold text-slate-800">Stj. Dt. Sıla Hekim Girişi</h3>
+      <h3 class="text-lg font-extrabold text-slate-800">Dt. Sıla Hekim Girişi</h3>
       <input id="doctor-pin-input" type="password" maxlength="4" placeholder="••••"
         class="w-full py-3 rounded-2xl border-2 border-sky-200 text-center font-extrabold text-xl tracking-[0.5em] focus:border-sky-500 focus:outline-none" />
       <p id="doctor-pin-error" class="text-xs font-bold text-rose-500 hidden">Hatalı Hekim PIN Kodu!</p>
@@ -417,13 +348,11 @@
     </div>
   </div>
 
-  <!-- MODAL 6: STJ. DT. SILA CANLI HEKİM KONTROL PANELİ -->
   <div id="doctor-dashboard-modal" class="hidden fixed inset-0 z-50 bg-slate-100 overflow-y-auto p-4">
     <div class="max-w-2xl mx-auto space-y-4 pb-12">
-
       <div class="bg-white rounded-3xl p-4 shadow-sm border border-sky-100 flex items-center justify-between">
         <div>
-          <h2 class="text-lg font-extrabold text-sky-800">🦷 Stj. Dt. Sıla Klinik Kontrol Paneli</h2>
+          <h2 class="text-lg font-extrabold text-sky-800">🦷 Dt. Sıla Klinik Kontrol Paneli</h2>
           <p class="text-xs font-semibold text-slate-500">Dosya No & Şifre Eşleştirme • Canlı Takip • Not Gönderme</p>
         </div>
         <button onclick="closeDoctorDashboard()" class="px-3.5 py-2 rounded-xl bg-rose-50 text-rose-600 font-extrabold text-xs">✕ Kapat</button>
@@ -435,13 +364,9 @@
             <p class="text-xs font-extrabold text-slate-700">🧪 Hekim Test Modu (Klinik Demo)</p>
             <p class="text-[11px] text-slate-500">Açıkken saat beklemesi ve AI fırça şartı esnetilir.</p>
           </div>
-          <button id="toggle-test-mode-btn" onclick="toggleDoctorTestMode()" class="px-3 py-1.5 rounded-xl bg-slate-200 text-slate-700 font-extrabold text-xs">
-            Kapalı
-          </button>
+          <button id="toggle-test-mode-btn" onclick="toggleDoctorTestMode()" class="px-3 py-1.5 rounded-xl bg-slate-200 text-slate-700 font-extrabold text-xs">Kapalı</button>
         </div>
-
         <hr class="border-slate-100" />
-
         <div>
           <label class="block text-xs font-extrabold text-slate-700 mb-1">☁️ Canlı Bulut Veritabanı URL (Firebase Realtime DB)</label>
           <div class="flex gap-2">
@@ -466,7 +391,6 @@
         </div>
       </div>
 
-      <!-- YENİ HASTA KAYDI -->
       <div class="bg-white rounded-3xl p-4 shadow-sm border border-emerald-200 space-y-3">
         <h3 class="text-sm font-extrabold text-emerald-800">➕ Yeni Hasta Kaydı Oluştur (Zero-PII)</h3>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -484,7 +408,6 @@
         <div id="created-patient-alert" class="hidden p-3 rounded-2xl bg-emerald-50 border border-emerald-300 text-xs font-bold text-emerald-900"></div>
       </div>
 
-      <!-- HASTA LİSTESİ & NOT GÖNDERME -->
       <div class="bg-white rounded-3xl p-4 shadow-sm border border-sky-100 space-y-3">
         <div class="flex items-center justify-between gap-2">
           <h3 class="text-sm font-extrabold text-slate-800">📋 Kayıtlı Hastalar (<span id="patient-count">0</span>)</h3>
@@ -493,41 +416,19 @@
         </div>
         <div id="doctor-patient-list" class="space-y-3"></div>
       </div>
-
     </div>
   </div>
 
   <script>
-    // ==================== PWA MANIFEST & SENİN ÖZEL LOGON (logo.jpg) ====================
-    (function initCustomLogoPWA() {
-      const baseUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
-      const logoFullUrl = baseUrl + 'logo.jpg';
-
-      const manifest = {
-        name: "Plak Avcısı: Kral Mutans'a Karşı",
-        short_name: "Plak Avcısı",
-        start_url: baseUrl || ".",
-        display: "standalone",
-        background_color: "#9db6c4",
-        theme_color: "#7c9eb2",
-        icons: [
-          { src: logoFullUrl, sizes: "512x512", type: "image/jpeg", purpose: "any" },
-          { src: logoFullUrl, sizes: "512x512", type: "image/jpeg", purpose: "maskable" }
-        ]
-      };
-      const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
-      document.getElementById('pwa-manifest').href = URL.createObjectURL(manifestBlob);
-
-      if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
-        const swCode = `
-          self.addEventListener('install', e => self.skipWaiting());
-          self.addEventListener('activate', e => self.clients.claim());
-          self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => caches.match(e.request))));
-        `;
-        const swBlob = new Blob([swCode], { type: 'application/javascript' });
-        navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => {});
-      }
-    })();
+    if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+      const swCode = `
+        self.addEventListener('install', e => self.skipWaiting());
+        self.addEventListener('activate', e => self.clients.claim());
+        self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => caches.match(e.request))));
+      `;
+      const swBlob = new Blob([swCode], { type: 'application/javascript' });
+      navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => {});
+    }
 
     let deferredPrompt = null;
     window.addEventListener('beforeinstallprompt', (e) => {
@@ -556,14 +457,13 @@
       }
     }
 
-    // ==================== SENİN SEÇTİĞİN 6 ÖZEL KAHRAMAN KARAKTERİ ====================
     const HEROES = [
-      { id: 'unicorn', emoji: '🦄', name: 'Tek boynuzlu at' },
+      { id: 'unicorn', emoji: '🦄', name: 'Unicorn' },
       { id: 'princess', emoji: '👸', name: 'Prenses' },
       { id: 'fairy', emoji: '🧚‍♀️', name: 'Peri Kızı' },
       { id: 'prince', emoji: '🤴', name: 'Prens' },
       { id: 'knight', emoji: '🤺', name: 'Şövalye' },
-      { id: 'car', emoji: '🏎️', name: 'Yarış arabası' }
+      { id: 'car', emoji: '🏎️', name: 'Araba' }
     ];
 
     const DOCTOR_PIN = '1884';
@@ -582,20 +482,11 @@
     window.addEventListener('DOMContentLoaded', () => {
       renderHeroSelection();
       updateCloudBadge();
-      if (firebaseBaseUrl) {
-        document.getElementById('firebase-url-input').value = firebaseBaseUrl;
-      }
-
+      if (firebaseBaseUrl) document.getElementById('firebase-url-input').value = firebaseBaseUrl;
       const savedPin = localStorage.getItem('plak_active_pin');
       if (savedPin) {
-        loadPatientByPin(savedPin).then(p => {
-          if (p) {
-            currentPatient = p;
-            enterGameScreen();
-          }
-        });
+        loadPatientByPin(savedPin).then(p => { if (p) { currentPatient = p; enterGameScreen(); } });
       }
-
       setInterval(checkScheduledReminders, 30000);
     });
 
@@ -615,20 +506,13 @@
       renderHeroSelection();
     }
 
-    // ==================== VERİTABANI KATMANI ====================
-    function getLocalPatients() {
-      return JSON.parse(localStorage.getItem('plak_patients_db') || '{}');
-    }
-
-    function saveLocalPatients(db) {
-      localStorage.setItem('plak_patients_db', JSON.stringify(db));
-    }
+    function getLocalPatients() { return JSON.parse(localStorage.getItem('plak_patients_db') || '{}'); }
+    function saveLocalPatients(db) { localStorage.setItem('plak_patients_db', JSON.stringify(db)); }
 
     async function savePatientRecord(patient) {
       const db = getLocalPatients();
       db[patient.pin] = patient;
       saveLocalPatients(db);
-
       if (firebaseBaseUrl) {
         try {
           const cleanUrl = firebaseBaseUrl.replace(/\/$/, '');
@@ -637,9 +521,7 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(patient)
           });
-        } catch (err) {
-          console.warn('Bulut kaydı çevrimdışı kuyrukta:', err);
-        }
+        } catch (err) {}
       }
     }
 
@@ -655,39 +537,30 @@
             saveLocalPatients(db);
             return data;
           }
-        } catch (err) {
-          console.warn('Bulut okuma hatası, yerel kontrol ediliyor');
-        }
+        } catch (err) {}
       }
-      const db = getLocalPatients();
-      return db[pin] || null;
+      return getLocalPatients()[pin] || null;
     }
 
-    // ==================== HASTA GİRİŞ AKIŞI ====================
     async function handlePatientLogin() {
       const nameInput = document.getElementById('login-name').value.trim();
       const pinInput = document.getElementById('login-pin').value.trim();
       const errEl = document.getElementById('login-error');
       errEl.classList.add('hidden');
-
       if (!nameInput || pinInput.length !== 4) {
-        errEl.innerText = 'Lütfen kahraman adını ve Stj. Dt. Sıla’nın verdiği 4 haneli şifreyi eksiksiz gir!';
+        errEl.innerText = 'Lütfen kahraman adını ve Dt. Sıla’nın verdiği 4 haneli şifreyi eksiksiz gir!';
         errEl.classList.remove('hidden');
         return;
       }
-
       let patient = await loadPatientByPin(pinInput);
-
       if (!patient) {
-        errEl.innerText = 'Bu 4 haneli şifre bulunamadı. Stj. Dt. Sıla’nın verdiği şifreyi kontrol et!';
+        errEl.innerText = 'Bu 4 haneli şifre bulunamadı. Dt. Sıla’nın verdiği şifreyi kontrol et!';
         errEl.classList.remove('hidden');
         return;
       }
-
       patient.nickname = nameInput;
       patient.heroId = selectedHero.id;
       patient.lastActive = new Date().toISOString();
-
       await savePatientRecord(patient);
       currentPatient = patient;
       localStorage.setItem('plak_active_pin', pinInput);
@@ -698,11 +571,8 @@
       document.getElementById('login-screen').classList.add('hidden');
       document.getElementById('game-screen').classList.remove('hidden');
       updateGameUI();
-
       if ('Notification' in window && Notification.permission === 'default' && !localStorage.getItem('plak_notif_asked')) {
-        setTimeout(() => {
-          document.getElementById('permission-modal').classList.remove('hidden');
-        }, 600);
+        setTimeout(() => document.getElementById('permission-modal').classList.remove('hidden'), 600);
       }
     }
 
@@ -713,15 +583,11 @@
       document.getElementById('login-screen').classList.remove('hidden');
     }
 
-    // ==================== OYUN ARAYÜZÜ GÜNCELLEME ====================
-    function getTodayStr() {
-      return new Date().toISOString().split('T')[0];
-    }
+    function getTodayStr() { return new Date().toISOString().split('T')[0]; }
 
     function updateGameUI() {
       if (!currentPatient) return;
       const hero = HEROES.find(h => h.id === currentPatient.heroId) || HEROES[0];
-
       document.getElementById('player-avatar-badge').innerText = hero.emoji;
       document.getElementById('player-display-name').innerText = currentPatient.nickname || 'Ajan';
       document.getElementById('player-pin-tag').innerText = `#${currentPatient.pin}`;
@@ -739,7 +605,6 @@
       const maxHp = (currentPatient.targetDays || 14) * 100;
       const currentHp = Math.max(0, currentPatient.bossHp ?? maxHp);
       const pct = Math.round((currentHp / maxHp) * 100);
-
       document.getElementById('target-days-label').innerText = currentPatient.targetDays || 14;
       document.getElementById('boss-hp-bar').style.width = `${pct}%`;
       document.getElementById('boss-hp-text').innerText = `${currentHp} / ${maxHp}`;
@@ -758,27 +623,20 @@
       const logs = currentPatient.dailyLogs?.[today] || {};
       document.getElementById('badge-morning-done').classList.toggle('hidden', !logs.morning);
       document.getElementById('badge-evening-done').classList.toggle('hidden', !logs.evening);
-
       ['water', 'floss', 'apple', 'tongue'].forEach(p => {
         const btn = document.getElementById(`power-${p}`);
-        if (logs[p]) {
-          btn.classList.add('opacity-50', 'line-through');
-        } else {
-          btn.classList.remove('opacity-50', 'line-through');
-        }
+        btn.classList.toggle('opacity-50', !!logs[p]);
+        btn.classList.toggle('line-through', !!logs[p]);
       });
     }
 
-    // ==================== BİLDİRİM & TAKVİM ALARMI ====================
     function acceptNotifications() {
       localStorage.setItem('plak_notif_asked', '1');
       document.getElementById('permission-modal').classList.add('hidden');
       if ('Notification' in window) {
         Notification.requestPermission().then(perm => {
           if (perm === 'granted') {
-            new Notification('🦷 Plak Avcısı Hazır!', {
-              body: 'Sabah 07:30 ve Akşam 21:00 diş fırçalama hatırlatıcıların aktif!'
-            });
+            new Notification('🦷 Plak Avcısı Hazır!', { body: 'Sabah 07:30 ve Akşam 21:00 diş fırçalama hatırlatıcıların aktif!' });
           }
         });
       }
@@ -795,27 +653,18 @@
       document.getElementById('reminder-modal').classList.remove('hidden');
     }
 
-    function closeReminderModal() {
-      document.getElementById('reminder-modal').classList.add('hidden');
-    }
+    function closeReminderModal() { document.getElementById('reminder-modal').classList.add('hidden'); }
 
     function saveAndTestNotifications() {
       const mTime = document.getElementById('morning-time-input').value || '07:30';
       const eTime = document.getElementById('evening-time-input').value || '21:00';
       localStorage.setItem('plak_morning_time', mTime);
       localStorage.setItem('plak_evening_time', eTime);
-
       if ('Notification' in window) {
         Notification.requestPermission().then(perm => {
           if (perm === 'granted') {
-            new Notification('☀️ Sabah Hatırlatıcı Testi (' + mTime + ')', {
-              body: 'Bugün dişini fırçalamayı unutma!'
-            });
-            setTimeout(() => {
-              new Notification('🌙 Akşam Hatırlatıcı Testi (' + eTime + ')', {
-                body: 'Yatmadan dişini fırçala bakalım!'
-              });
-            }, 1500);
+            new Notification('☀️ Sabah Hatırlatıcı Testi (' + mTime + ')', { body: 'Bugün dişini fırçalamayı unutma!' });
+            setTimeout(() => new Notification('🌙 Akşam Hatırlatıcı Testi (' + eTime + ')', { body: 'Yatmadan dişini fırçala bakalım!' }), 1500);
           } else {
             alert('Tarayıcı bildirim izni kapalı. Alttaki "Telefona Günlük Takvim Alarmı Kur" butonunu kullanabilirsin!');
           }
@@ -830,10 +679,8 @@
       const hhmm = now.toTimeString().slice(0, 5);
       const todayKey = getTodayStr() + '_' + hhmm;
       if (localStorage.getItem('plak_last_notified') === todayKey) return;
-
       const mTime = localStorage.getItem('plak_morning_time') || '07:30';
       const eTime = localStorage.getItem('plak_evening_time') || '21:00';
-
       if (hhmm === mTime) {
         localStorage.setItem('plak_last_notified', todayKey);
         new Notification('☀️ Günaydın Ajan!', { body: 'Bugün dişini fırçalamayı unutma!' });
@@ -847,36 +694,17 @@
       const mTime = (document.getElementById('morning-time-input').value || '07:30').replace(':', '') + '00';
       const eTime = (document.getElementById('evening-time-input').value || '21:00').replace(':', '') + '00';
       const dateStamp = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-
       const icsContent = [
-        'BEGIN:VCALENDAR',
-        'VERSION:2.0',
-        'PRODID:-//Stj. Dt. Sila//Plak Avcisi//TR',
-        'BEGIN:VEVENT',
-        `DTSTART:${dateStamp}T${mTime}`,
-        'RRULE:FREQ=DAILY',
+        'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Stj. Dt. Sila Bayram//Plak Avcisi//TR',
+        'BEGIN:VEVENT', `DTSTART:${dateStamp}T${mTime}`, 'RRULE:FREQ=DAILY',
         'SUMMARY:☀️ Bugün dişini fırçalamayı unutma!',
-        'DESCRIPTION:Kral Mutans sabah saldırısına hazır! Dişini fırçala ve Plak Avcısı uygulamasından puanını kap.',
-        'BEGIN:VALARM',
-        'TRIGGER:-PT0M',
-        'ACTION:DISPLAY',
-        'DESCRIPTION:Bugün dişini fırçalamayı unutma!',
-        'END:VALARM',
+        'BEGIN:VALARM', 'TRIGGER:-PT0M', 'ACTION:DISPLAY', 'DESCRIPTION:Bugün dişini fırçalamayı unutma!', 'END:VALARM',
         'END:VEVENT',
-        'BEGIN:VEVENT',
-        `DTSTART:${dateStamp}T${eTime}`,
-        'RRULE:FREQ=DAILY',
+        'BEGIN:VEVENT', `DTSTART:${dateStamp}T${eTime}`, 'RRULE:FREQ=DAILY',
         'SUMMARY:🌙 Yatmadan dişini fırçala bakalım!',
-        'DESCRIPTION:Gece boyunca dişlerini korumak için Plak Avcısı akşam görevini tamamla!',
-        'BEGIN:VALARM',
-        'TRIGGER:-PT0M',
-        'ACTION:DISPLAY',
-        'DESCRIPTION:Yatmadan dişini fırçala bakalım!',
-        'END:VALARM',
-        'END:VEVENT',
-        'END:VCALENDAR'
+        'BEGIN:VALARM', 'TRIGGER:-PT0M', 'ACTION:DISPLAY', 'DESCRIPTION:Yatmadan dişini fırçala bakalım!', 'END:VALARM',
+        'END:VEVENT', 'END:VCALENDAR'
       ].join('\r\n');
-
       const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
@@ -884,26 +712,17 @@
       link.click();
     }
 
-    // ==================== CANLI AI KAMERA & YÜZ ENGELLEYİCİ ====================
     async function startBrushVerification(type) {
       const today = getTodayStr();
       if (!doctorTestMode && currentPatient?.dailyLogs?.[today]?.[type]) {
         alert('Bu öğünün saldırısını bugün zaten tamamladın! Harikasın!');
         return;
       }
-
       if (!doctorTestMode) {
         const hour = new Date().getHours();
-        if (type === 'morning' && (hour < 6 || hour >= 14)) {
-          alert('Sabah saldırısı 06:00 - 14:00 saatleri arasında yapılabilir!');
-          return;
-        }
-        if (type === 'evening' && (hour < 18 && hour >= 2)) {
-          alert('Akşam saldırısı 18:00 - 02:00 saatleri arasında yapılabilir!');
-          return;
-        }
+        if (type === 'morning' && (hour < 6 || hour >= 14)) { alert('Sabah saldırısı 06:00 - 14:00 saatleri arasında yapılabilir!'); return; }
+        if (type === 'evening' && (hour < 18 && hour >= 2)) { alert('Akşam saldırısı 18:00 - 02:00 saatleri arasında yapılabilir!'); return; }
       }
-
       currentAttackType = type;
       aiVerifiedBrush = false;
       aiDetectedPerson = false;
@@ -913,18 +732,14 @@
     }
 
     async function openCameraStream() {
-      if (cameraStream) {
-        cameraStream.getTracks().forEach(t => t.stop());
-      }
+      if (cameraStream) cameraStream.getTracks().forEach(t => t.stop());
       try {
         cameraStream = await navigator.mediaDevices.getUserMedia({
           video: { facingMode: currentFacingMode, width: { ideal: 480 }, height: { ideal: 480 } },
           audio: false
         });
         document.getElementById('camera-video').srcObject = cameraStream;
-      } catch (err) {
-        alert('Kamera erişimi açılamadı. Lütfen tarayıcı ayarlarından kamera izni verin.');
-      }
+      } catch (err) { alert('Kamera erişimi açılamadı.'); }
     }
 
     function switchCameraFacing() {
@@ -935,29 +750,19 @@
     async function startAiDetectionLoop() {
       const statusBadge = document.getElementById('ai-live-status');
       const targetBox = document.getElementById('ai-target-box');
-
       if (!cocoModel) {
         statusBadge.innerText = '🤖 Yapay Zeka Tarayıcı Yükleniyor...';
-        try {
-          cocoModel = await cocoSsd.load();
-        } catch (e) {
-          statusBadge.innerText = '⚠️ AI Çevrimdışı - Fırçayı Ortala';
-          return;
-        }
+        try { cocoModel = await cocoSsd.load(); } catch (e) { statusBadge.innerText = '⚠️ AI Çevrimdışı'; return; }
       }
-
       clearInterval(aiScanInterval);
       aiScanInterval = setInterval(async () => {
         const video = document.getElementById('camera-video');
         if (!video || video.readyState !== 4 || !cocoModel) return;
-
         const predictions = await cocoModel.detect(video);
         const hasPerson = predictions.some(p => p.class === 'person' && p.score > 0.55);
         const hasBrush = predictions.some(p => p.class === 'toothbrush' && p.score > 0.35);
-
         aiDetectedPerson = hasPerson;
         aiVerifiedBrush = hasBrush;
-
         if (hasPerson) {
           targetBox.className = 'absolute inset-8 border-4 border-rose-500 rounded-2xl pointer-events-none flex items-end justify-center pb-2';
           statusBadge.className = 'bg-rose-600 text-white text-[11px] font-extrabold px-3 py-1 rounded-full';
@@ -967,68 +772,45 @@
           statusBadge.className = 'bg-emerald-600 text-white text-[11px] font-extrabold px-3 py-1 rounded-full';
           statusBadge.innerText = '✅ Diş Fırçası Doğrulandı! Ateşle!';
         } else {
-          const otherObj = predictions[0]?.class;
           targetBox.className = 'absolute inset-8 border-2 border-dashed border-sky-400 rounded-2xl pointer-events-none flex items-end justify-center pb-2';
           statusBadge.className = 'bg-slate-900/80 text-white text-[11px] font-extrabold px-3 py-1 rounded-full';
-          statusBadge.innerText = otherObj ? `🔍 Algılanan: ${otherObj} (Diş Fırçası Bekleniyor)` : '🪥 Diş Fırçanı Çerçeveye Yaklaştır';
+          statusBadge.innerText = '🪥 Diş Fırçanı Çerçeveye Yaklaştır';
         }
       }, 650);
     }
 
     function closeCameraModal() {
       clearInterval(aiScanInterval);
-      if (cameraStream) {
-        cameraStream.getTracks().forEach(t => t.stop());
-        cameraStream = null;
-      }
+      if (cameraStream) { cameraStream.getTracks().forEach(t => t.stop()); cameraStream = null; }
       document.getElementById('camera-modal').classList.add('hidden');
     }
 
     async function captureAndAttack() {
       if (!doctorTestMode) {
-        if (aiDetectedPerson) {
-          alert('🚫 Güvenlik Uyarısı: Kadrajda yüz veya kişi algılandı! Lütfen sadece diş fırçanı çek.');
-          return;
-        }
-        if (!aiVerifiedBrush) {
-          alert('🪥 Diş fırçası doğrulanamadı! Lütfen diş fırçanı kameraya net şekilde gösterip yeşil onayı bekle.');
-          return;
-        }
+        if (aiDetectedPerson) { alert('🚫 Kadrajda kişi algılandı! Lütfen sadece diş fırçanı çek.'); return; }
+        if (!aiVerifiedBrush) { alert('🪥 Diş fırçası doğrulanamadı! Lütfen yeşil onayı bekle.'); return; }
       }
-
       const video = document.getElementById('camera-video');
       const canvas = document.getElementById('capture-canvas');
-      canvas.width = 140;
-      canvas.height = 140;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(video, 0, 0, 140, 140);
+      canvas.width = 140; canvas.height = 140;
+      canvas.getContext('2d').drawImage(video, 0, 0, 140, 140);
       const thumbDataUrl = canvas.toDataURL('image/jpeg', 0.65);
-
       closeCameraModal();
       await applyDamageToBoss(50, currentAttackType, thumbDataUrl);
     }
 
     async function useSuperPower(powerKey, label) {
       const today = getTodayStr();
-      if (!doctorTestMode && currentPatient?.dailyLogs?.[today]?.[powerKey]) {
-        alert('Bu süper gücü bugün zaten kullandın!');
-        return;
-      }
+      if (!doctorTestMode && currentPatient?.dailyLogs?.[today]?.[powerKey]) { alert('Bu süper gücü bugün zaten kullandın!'); return; }
       await applyDamageToBoss(15, powerKey, null, label);
     }
 
-    async function applyDamageToBoss(damage, actionKey, photoUrl = null, powerLabel = null) {
+    async function applyDamageToBoss(damage, actionKey, photoUrl = null) {
       const today = getTodayStr();
       if (!currentPatient.dailyLogs) currentPatient.dailyLogs = {};
       if (!currentPatient.dailyLogs[today]) currentPatient.dailyLogs[today] = {};
-
-      const isFirstActionToday = Object.keys(currentPatient.dailyLogs[today]).length === 0;
+      if (Object.keys(currentPatient.dailyLogs[today]).length === 0) currentPatient.streak = (currentPatient.streak || 0) + 1;
       currentPatient.dailyLogs[today][actionKey] = true;
-
-      if (isFirstActionToday) {
-        currentPatient.streak = (currentPatient.streak || 0) + 1;
-      }
-
       const maxHp = (currentPatient.targetDays || 14) * 100;
       currentPatient.bossHp = Math.max(0, (currentPatient.bossHp ?? maxHp) - damage);
       currentPatient.xp = (currentPatient.xp || 0) + damage;
@@ -1048,10 +830,7 @@
       monsterEl.classList.add('animate-shake');
       dmgPopup.innerText = `-${damage} HP!`;
       dmgPopup.classList.remove('hidden');
-      setTimeout(() => {
-        monsterEl.classList.remove('animate-shake');
-        dmgPopup.classList.add('hidden');
-      }, 900);
+      setTimeout(() => { monsterEl.classList.remove('animate-shake'); dmgPopup.classList.add('hidden'); }, 900);
 
       await savePatientRecord(currentPatient);
       updateGameUI();
@@ -1063,7 +842,6 @@
       document.getElementById('certificate-modal').classList.remove('hidden');
     }
 
-    // ==================== STJ. DT. SILA HEKİM PANELİ (PIN: 1884) ====================
     function openDoctorPinModal() {
       document.getElementById('doctor-pin-input').value = '';
       document.getElementById('doctor-pin-error').classList.add('hidden');
@@ -1071,8 +849,7 @@
     }
 
     async function verifyDoctorPin() {
-      const val = document.getElementById('doctor-pin-input').value.trim();
-      if (val === DOCTOR_PIN) {
+      if (document.getElementById('doctor-pin-input').value.trim() === DOCTOR_PIN) {
         document.getElementById('doctor-pin-modal').classList.add('hidden');
         document.getElementById('doctor-dashboard-modal').classList.remove('hidden');
         await renderDoctorPatientList();
@@ -1097,60 +874,38 @@
 
     function updateCloudBadge() {
       const badge = document.getElementById('cloud-status-badge');
-      if (firebaseBaseUrl) {
-        badge.innerText = '☁️ Canlı Bulut';
-        badge.className = 'hidden sm:inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700';
-      } else {
-        badge.innerText = '💾 Yerel Mod';
-        badge.className = 'hidden sm:inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600';
-      }
+      badge.innerText = firebaseBaseUrl ? '☁️ Canlı Bulut' : '💾 Yerel Mod';
+      badge.className = firebaseBaseUrl
+        ? 'hidden sm:inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700'
+        : 'hidden sm:inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600';
     }
 
     async function saveFirebaseUrl() {
-      const url = document.getElementById('firebase-url-input').value.trim();
-      firebaseBaseUrl = url;
-      localStorage.setItem('plak_firebase_url', url);
+      firebaseBaseUrl = document.getElementById('firebase-url-input').value.trim();
+      localStorage.setItem('plak_firebase_url', firebaseBaseUrl);
       updateCloudBadge();
-      alert(url ? '☁️ Bulut veritabanı bağlantısı kaydedildi!' : 'Yerel moda geçildi.');
+      alert(firebaseBaseUrl ? '☁️ Bulut veritabanı bağlantısı kaydedildi!' : 'Yerel moda geçildi.');
       await renderDoctorPatientList();
     }
 
     async function registerNewPatientByDoctor() {
       const fileNo = document.getElementById('new-patient-fileno').value.trim();
       const targetDays = parseInt(document.getElementById('new-patient-days').value, 10) || 14;
-      if (!fileNo) {
-        alert('Lütfen hastane dosya numarasını girin!');
-        return;
-      }
-
+      if (!fileNo) { alert('Lütfen hastane dosya numarasını girin!'); return; }
       const db = getLocalPatients();
       let newPin;
-      do {
-        newPin = Math.floor(1000 + Math.random() * 9000).toString();
-      } while (db[newPin]);
+      do { newPin = Math.floor(1000 + Math.random() * 9000).toString(); } while (db[newPin]);
 
       const newPatient = {
-        pin: newPin,
-        fileNo: fileNo,
-        nickname: 'Henüz Giriş Yapmadı',
-        heroId: 'unicorn',
-        targetDays: targetDays,
-        bossHp: targetDays * 100,
-        streak: 0,
-        xp: 0,
-        doctorNote: '',
-        dailyLogs: {},
-        photos: [],
-        createdAt: new Date().toISOString()
+        pin: newPin, fileNo: fileNo, nickname: 'Henüz Giriş Yapmadı', heroId: 'unicorn',
+        targetDays: targetDays, bossHp: targetDays * 100, streak: 0, xp: 0, doctorNote: '',
+        dailyLogs: {}, photos: [], createdAt: new Date().toISOString()
       };
-
       await savePatientRecord(newPatient);
       document.getElementById('new-patient-fileno').value = '';
-
       const alertBox = document.getElementById('created-patient-alert');
-      alertBox.innerHTML = `✅ Kayıt Oluşturuldu! <strong>Dosya No: ${fileNo}</strong> için Hasta Giriş Şifresi: <span class="text-lg font-extrabold bg-white px-2.5 py-0.5 rounded-lg border border-emerald-400 ml-1">${newPin}</span><br/><span class="text-[11px] font-normal">Veliye sadece bu 4 haneli şifreyi vermeniz yeterli.</span>`;
+      alertBox.innerHTML = `✅ Kayıt Oluşturuldu! <strong>Dosya No: ${fileNo}</strong> için Hasta Giriş Şifresi: <span class="text-lg font-extrabold bg-white px-2.5 py-0.5 rounded-lg border border-emerald-400 ml-1">${newPin}</span>`;
       alertBox.classList.remove('hidden');
-
       await renderDoctorPatientList();
     }
 
@@ -1162,15 +917,12 @@
         (p.pin || '').includes(search) ||
         (p.nickname || '').toLowerCase().includes(search)
       );
-
       document.getElementById('patient-count').innerText = patients.length;
       const container = document.getElementById('doctor-patient-list');
-
       if (patients.length === 0) {
-        container.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">Henüz kayıtlı hasta bulunmuyor. Yukarıdan dosya numarası ile şifre üretebilirsiniz.</p>`;
+        container.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">Henüz kayıtlı hasta bulunmuyor.</p>`;
         return;
       }
-
       container.innerHTML = patients.map(p => {
         const maxHp = (p.targetDays || 14) * 100;
         const pct = Math.max(0, Math.round(((p.bossHp ?? maxHp) / maxHp) * 100));
@@ -1180,7 +932,6 @@
             <span class="block text-[9px] font-bold text-slate-500 mt-0.5">${ph.type}</span>
           </div>
         `).join('');
-
         return `
           <div class="p-3.5 rounded-2xl border border-slate-200 bg-slate-50/70 space-y-2.5">
             <div class="flex flex-wrap items-center justify-between gap-2">
@@ -1190,39 +941,22 @@
               </div>
               <button onclick="deletePatientRecord('${p.pin}')" class="text-[11px] font-bold text-rose-500 hover:underline">Sil</button>
             </div>
-
             <div class="flex items-center justify-between text-xs font-bold text-slate-700">
               <span>🦸 Oyundaki Adı: <strong>${p.nickname}</strong></span>
               <span>🔥 ${p.streak || 0} Gün | Canavar: %${pct} HP</span>
             </div>
-
             <div class="pt-2 border-t border-slate-200 space-y-1.5">
-              <p class="text-[11px] font-extrabold text-slate-600">💌 Hastaya Not Gönder (Hazır Seç veya Düzenle):</p>
+              <p class="text-[11px] font-extrabold text-slate-600">💌 Hastaya Not Gönder:</p>
               <div class="flex flex-wrap gap-1.5">
-                <button onclick="fillDoctorNote('${p.pin}', 'Harika gidiyorsun böyle devam et 🏆')"
-                  class="px-2 py-1 rounded-lg bg-emerald-100 hover:bg-emerald-200 text-emerald-800 text-[10px] font-extrabold">
-                  🏆 Olumlu
-                </button>
-                <button onclick="fillDoctorNote('${p.pin}', 'Dişlerine iyi bak Kral Mutans\\'ı yenmeliyiz 🎖️')"
-                  class="px-2 py-1 rounded-lg bg-rose-100 hover:bg-rose-200 text-rose-800 text-[10px] font-extrabold">
-                  🎖️ Uyarı
-                </button>
-                <button onclick="fillDoctorNote('${p.pin}', 'Dişlerini fırçalamayı unutma 🪥')"
-                  class="px-2 py-1 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-800 text-[10px] font-extrabold">
-                  🪥 Hatırlatıcı
-                </button>
+                <button onclick="fillDoctorNote('${p.pin}', 'Harika gidiyorsun böyle devam et 🏆')" class="px-2 py-1 rounded-lg bg-emerald-100 text-emerald-800 text-[10px] font-extrabold">🏆 Olumlu</button>
+                <button onclick="fillDoctorNote('${p.pin}', 'Dişlerine iyi bak Kral Mutans\\'ı yenmeliyiz 🎖️')" class="px-2 py-1 rounded-lg bg-rose-100 text-rose-800 text-[10px] font-extrabold">🎖️ Uyarı</button>
+                <button onclick="fillDoctorNote('${p.pin}', 'Dişlerini fırçalamayı unutma 🪥')" class="px-2 py-1 rounded-lg bg-amber-100 text-amber-800 text-[10px] font-extrabold">🪥 Hatırlatıcı</button>
               </div>
               <div class="flex gap-1.5">
-                <input id="note-input-${p.pin}" type="text" value="${(p.doctorNote || '').replace(/"/g, '&quot;')}"
-                  placeholder="Hastaya özel not yazın..."
-                  class="flex-1 px-2.5 py-1.5 rounded-xl border border-slate-300 text-xs font-semibold bg-white" />
-                <button onclick="sendDoctorNoteToPatient('${p.pin}')"
-                  class="px-3 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-extrabold">
-                  Gönder
-                </button>
+                <input id="note-input-${p.pin}" type="text" value="${(p.doctorNote || '').replace(/"/g, '&quot;')}" placeholder="Hastaya özel not yazın..." class="flex-1 px-2.5 py-1.5 rounded-xl border border-slate-300 text-xs font-semibold bg-white" />
+                <button onclick="sendDoctorNoteToPatient('${p.pin}')" class="px-3 py-1.5 rounded-xl bg-sky-600 text-white text-xs font-extrabold">Gönder</button>
               </div>
             </div>
-
             ${photosHtml ? `<div class="pt-2 border-t border-slate-200"><p class="text-[10px] font-bold text-slate-500 mb-1">📷 Son Fırça Kanıtları:</p><div class="flex gap-2 overflow-x-auto">${photosHtml}</div></div>` : ''}
           </div>
         `;
@@ -1238,14 +972,10 @@
       const db = getLocalPatients();
       const patient = db[pin];
       if (!patient) return;
-
       const text = document.getElementById(`note-input-${pin}`).value.trim();
       patient.doctorNote = text;
       await savePatientRecord(patient);
-
-      if (currentPatient && currentPatient.pin === pin) {
-        currentPatient.doctorNote = text;
-      }
+      if (currentPatient && currentPatient.pin === pin) currentPatient.doctorNote = text;
       alert('✅ Not hastanın ekranına gönderildi!');
     }
 
