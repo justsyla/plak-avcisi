@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0284c7" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Plak Avcısı" />
+  <title>Plak Avcısı: Kral Mutans'a Karşı | Dt. Sıla</title>
+  <link id="pwa-manifest" rel="manifest" href="" />
+  <link id="apple-touch-icon" rel="apple-touch-icon" href="" />
+
+  <!-- Türkçe Karakter Uyumlu Oyun Fontları -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- TensorFlow.js & COCO-SSD Gerçek Zamanlı Diş Fırçası & Yüz Engelleyici AI -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.3/dist/coco-ssd.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 50%, #fefce8 100%);
+      color: #1e293b;
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+    h1, h2, h3, .font-game {
+      font-family: 'Baloo 2', cursive;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-10px) rotate(-3deg); }
+      40% { transform: translateX(10px) rotate(3deg); }
+      60% { transform: translateX(-8px); }
+      80% { transform: translateX(8px); }
+    }
+    @keyframes scanline {
+      0% { top: 5%; }
+      50% { top: 90%; }
+      100% { top: 5%; }
+    }
+    .animate-float { animation: float 3s ease-in-out infinite; }
+    .animate-shake { animation: shake 0.45s ease-in-out; }
+    .scan-line {
+      position: absolute;
+      left: 5%;
+      width: 90%;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #10b981, transparent);
+      box-shadow: 0 0 12px #10b981;
+      animation: scanline 2.2s linear infinite;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      border: 2px solid rgba(255, 255, 255, 0.95);
+      box-shadow: 0 10px 25px -5px rgba(14, 165, 233, 0.12);
+    }
+    @media print {
+      body * { visibility: hidden; }
+      #certificate-area, #certificate-area * { visibility: visible; }
+      #certificate-area {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        box-shadow: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="pb-24 select-none">
+
+  <!-- Üst Menü Barı -->
+  <header class="sticky top-0 z-30 bg-white/85 backdrop-blur-md border-b border-sky-100 px-4 py-3 flex items-center justify-between shadow-sm">
+    <div class="flex items-center gap-2">
+      <span class="text-2xl">🦷</span>
+      <div>
+        <h1 class="text-lg sm:text-xl font-extrabold text-sky-700 leading-none">PLAK AVCISI</h1>
+        <p class="text-[11px] font-bold text-emerald-600">Dt. Sıla Klinik Görevi</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <span id="cloud-status-badge" class="hidden sm:inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">
+        💾 Yerel Mod
+      </span>
+      <button onclick="openDoctorPinModal()" class="text-xs font-bold bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-200 px-3 py-1.5 rounded-xl transition flex items-center gap-1">
+        🩺 Dt. Sıla Paneli
+      </button>
+    </div>
+  </header>
+
+  <!-- ANA KONTEYNER -->
+  <main class="max-w-lg mx-auto px-4 pt-5">
+
+    <!-- 1. GİRİŞ / KAYIT EKRANI (Sadece İsim + Şifre) -->
+    <section id="login-screen" class="glass-card rounded-3xl p-6 text-center space-y-5">
+      <div class="w-20 h-20 mx-auto bg-gradient-to-tr from-sky-400 to-emerald-400 rounded-3xl flex items-center justify-center text-4xl shadow-lg animate-float">
+        🛡️
+      </div>
+      <div>
+        <h2 class="text-2xl font-extrabold text-slate-800">Kral Mutans'a Karşı!</h2>
+        <p class="text-sm text-slate-600 mt-1 font-medium">
+          Dt. Sıla'nın sana verdiği <strong>4 haneli şifreyi</strong> ve kahraman adını gir, göreve başla!
+        </p>
+      </div>
+
+      <div class="space-y-3 text-left">
+        <div>
+          <label class="block text-xs font-bold text-slate-600 mb-1 ml-1">🦸 Kahraman Adın (İsmin veya Lakabın)</label>
+          <input id="login-name" type="text" maxlength="20" placeholder="Örn: Mert veya SüperAslan"
+            class="w-full px-4 py-3 rounded-2xl border-2 border-sky-100 focus:border-sky-400 focus:outline-none font-bold text-slate-800 bg-white" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-600 mb-1 ml-1">🔑 Dt. Sıla'nın Verdiği 4 Haneli Şifre</label>
+          <input id="login-pin" type="tel" maxlength="4" placeholder="Örn: 4821"
+            class="w-full px-4 py-3 rounded-2xl border-2 border-sky-100 focus:border-sky-400 focus:outline-none font-extrabold text-center tracking-[0.4em] text-lg text-sky-700 bg-white" />
+        </div>
+      </div>
+
+      <!-- Kahraman Seçimi -->
+      <div class="text-left">
+        <label class="block text-xs font-bold text-slate-600 mb-2 ml-1">✨ Ajan Karakterini Seç</label>
+        <div id="hero-grid" class="grid grid-cols-3 gap-2"></div>
+      </div>
+
+      <button onclick="handlePatientLogin()"
+        class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-sky-500 to-emerald-500 hover:from-sky-600 hover:to-emerald-600 text-white font-game text-lg font-extrabold shadow-lg shadow-sky-200 active:scale-95 transition">
+        🚀 Göreve Başla!
+      </button>
+
+      <p id="login-error" class="text-xs font-bold text-rose-500 hidden"></p>
+    </section>
+
+    <!-- 2. AKTİF OYUN EKRANI -->
+    <section id="game-screen" class="hidden space-y-4">
+
+      <!-- Dt. Sıla'dan Gelen Özel Hekim Notu Banner'ı -->
+      <div id="doctor-note-banner" class="hidden rounded-2xl p-4 bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-300 shadow-sm flex items-start gap-3">
+        <span class="text-2xl">💌</span>
+        <div class="flex-1">
+          <p class="text-[11px] font-extrabold uppercase tracking-wider text-amber-700">Dt. Sıla'dan Sana Mesaj Var!</p>
+          <p id="doctor-note-text" class="text-sm font-bold text-slate-800 mt-0.5"></p>
+        </div>
+      </div>
+
+      <!-- Oyuncu Üst Bilgi Kartı -->
+      <div class="glass-card rounded-3xl p-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div id="player-avatar-badge" class="w-14 h-14 rounded-2xl bg-sky-100 flex items-center justify-center text-3xl shadow-inner">🦁</div>
+          <div>
+            <div class="flex items-center gap-1.5">
+              <h2 id="player-display-name" class="text-lg font-extrabold text-slate-800 leading-tight">Ajan</h2>
+              <span id="player-pin-tag" class="text-[10px] font-extrabold bg-sky-100 text-sky-700 px-2 py-0.5 rounded-full">#0000</span>
+            </div>
+            <p class="text-xs font-bold text-emerald-600">🔥 Seri: <span id="streak-count">0</span> Gün | ⭐ <span id="xp-count">0</span> Puan</p>
+          </div>
+        </div>
+        <div class="flex flex-col gap-1.5 items-end">
+          <button onclick="openReminderModal()" class="text-xs font-bold bg-amber-100 hover:bg-amber-200 text-amber-800 px-3 py-1.5 rounded-xl transition">
+            🔔 Hatırlatıcı
+          </button>
+          <button onclick="logoutPatient()" class="text-[11px] font-bold text-slate-400 hover:text-rose-500">
+            Çıkış Yap
+          </button>
+        </div>
+      </div>
+
+      <!-- KRAL MUTANS BOSS ARENASI -->
+      <div class="glass-card rounded-3xl p-5 text-center relative overflow-hidden">
+        <div class="flex items-center justify-between text-xs font-extrabold mb-2">
+          <span class="px-2.5 py-1 rounded-full bg-rose-100 text-rose-600">👾 BÖLÜM SONU CANAVARI</span>
+          <span class="text-slate-500">Hedef: <span id="target-days-label">14</span> Gün</span>
+        </div>
+
+        <!-- Canavar Görseli -->
+        <div id="monster-container" class="my-3 relative inline-block">
+          <div id="monster-emoji" class="text-7xl sm:text-8xl animate-float cursor-pointer transition-transform">🦠</div>
+          <div id="damage-popup" class="hidden absolute -top-2 -right-6 bg-rose-500 text-white font-game font-extrabold text-sm px-2.5 py-1 rounded-full shadow-lg">
+            -50 HP!
+          </div>
+        </div>
+
+        <h3 class="text-xl font-extrabold text-rose-600">Kral Mutans & Asit Ordusu</h3>
+        <p id="monster-taunt" class="text-xs font-bold text-slate-500 mb-3">"Dişlerini fırçalamazsan kaleler kuracağım!"</p>
+
+        <!-- HP Barı -->
+        <div class="w-full bg-slate-200 rounded-full h-5 p-0.5 overflow-hidden shadow-inner">
+          <div id="boss-hp-bar" class="h-full rounded-full bg-gradient-to-r from-rose-500 to-orange-400 transition-all duration-500 flex items-center justify-end pr-2" style="width: 100%;">
+          </div>
+        </div>
+        <div class="flex justify-between text-xs font-extrabold mt-1.5 px-1">
+          <span class="text-rose-600">Canavar Gücü: <span id="boss-hp-text">1400 / 1400</span> HP</span>
+          <span class="text-emerald-600">%<span id="boss-percent">100</span></span>
+        </div>
+
+        <!-- Zafer Sertifikası Butonu (Canavar Yenilince Açılır) -->
+        <button id="victory-cert-btn" onclick="openCertificateModal()"
+          class="hidden mt-4 w-full py-3 rounded-2xl bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-900 font-game font-extrabold text-base shadow-lg animate-bounce">
+          🏆 Zafer Sertifikanı Al!
+        </button>
+      </div>
+
+      <!-- SABAH & AKŞAM ANA SALDIRI BUTONLARI -->
+      <div class="grid grid-cols-2 gap-3">
+        <button id="btn-morning-attack" onclick="startBrushVerification('morning')"
+          class="p-4 rounded-3xl bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-lg shadow-orange-200 active:scale-95 transition text-left relative overflow-hidden">
+          <div class="text-3xl mb-1">☀️</div>
+          <div class="font-game font-extrabold text-base leading-tight">Sabah Saldırısı</div>
+          <div class="text-[11px] font-bold opacity-90 mt-0.5">06:00 - 14:00 (-50 HP)</div>
+          <span id="badge-morning-done" class="hidden mt-2 inline-block bg-white/25 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full">✅ Tamamlandı</span>
+        </button>
+
+        <button id="btn-evening-attack" onclick="startBrushVerification('evening')"
+          class="p-4 rounded-3xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-200 active:scale-95 transition text-left relative overflow-hidden">
+          <div class="text-3xl mb-1">🌙</div>
+          <div class="font-game font-extrabold text-base leading-tight">Akşam Saldırısı</div>
+          <div class="text-[11px] font-bold opacity-90 mt-0.5">18:00 - 02:00 (-50 HP)</div>
+          <span id="badge-evening-done" class="hidden mt-2 inline-block bg-white/25 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full">✅ Tamamlandı</span>
+        </button>
+      </div>
+
+      <!-- GÜNLÜK SÜPER GÜÇLER (Ekstra Koruma Kalkanları) -->
+      <div class="glass-card rounded-3xl p-4 space-y-2.5">
+        <div class="flex items-center justify-between">
+          <h3 class="text-sm font-extrabold text-slate-700">⚡ Günlük Süper Güçler (+15 HP Hasar)</h3>
+          <span class="text-[11px] font-bold text-sky-600">Günde 1'er kez</span>
+        </div>
+        <div class="grid grid-cols-2 gap-2 text-xs font-bold">
+          <button id="power-water" onclick="useSuperPower('water', 'Şeker Sonrası Su Kalkanı')"
+            class="p-2.5 rounded-2xl bg-sky-50 hover:bg-sky-100 border border-sky-200 text-sky-800 flex items-center gap-2 transition text-left">
+            <span class="text-xl">💧</span>
+            <span>Şeker Sonrası Su İçtim</span>
+          </button>
+          <button id="power-floss" onclick="useSuperPower('floss', 'Diş İpi Lazeri')"
+            class="p-2.5 rounded-2xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 flex items-center gap-2 transition text-left">
+            <span class="text-xl">🧵</span>
+            <span>Diş İpi Kullandım</span>
+          </button>
+          <button id="power-apple" onclick="useSuperPower('apple', 'Sağlıklı Atıştırmalık')"
+            class="p-2.5 rounded-2xl bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-800 flex items-center gap-2 transition text-left">
+            <span class="text-xl">🍎</span>
+            <span>Şekersiz Ara Öğün</span>
+          </button>
+          <button id="power-tongue" onclick="useSuperPower('tongue', 'Dil Temizliği Dalgası')"
+            class="p-2.5 rounded-2xl bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-800 flex items-center gap-2 transition text-left">
+            <span class="text-xl">👅</span>
+            <span>Dilimi Temizledim</span>
+          </button>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- PWA TELEFONA UYGULAMA OLARAK YÜKLEME ÇUBUĞU -->
+  <div id="pwa-install-banner" class="hidden fixed bottom-3 left-3 right-3 z-40 max-w-lg mx-auto bg-slate-900 text-white rounded-2xl p-3.5 shadow-2xl border border-slate-700 flex items-center justify-between gap-3">
+    <div class="flex items-center gap-2.5">
+      <span class="text-2xl">📲</span>
+      <div>
+        <p class="text-xs font-extrabold text-sky-300">Uygulamayı Ana Ekrana Ekle</p>
+        <p id="pwa-install-desc" class="text-[11px] text-slate-300">Tek dokunuşla açmak ve bildirim almak için yükle!</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-1.5">
+      <button id="pwa-install-btn" onclick="triggerPwaInstall()" class="px-3 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-extrabold whitespace-nowrap">
+        Yükle
+      </button>
+      <button onclick="document.getElementById('pwa-install-banner').classList.add('hidden')" class="p-1 text-slate-400 hover:text-white text-sm">✕</button>
+    </div>
+  </div>
+
+  <!-- MODAL 1: BİLDİRİM İZİN PENCERESİ (Açılışta Sorar) -->
+  <div id="permission-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl border-2 border-sky-200">
+      <div class="w-16 h-16 mx-auto bg-amber-100 rounded-2xl flex items-center justify-center text-4xl">🔔</div>
+      <h3 class="text-xl font-extrabold text-slate-800">Bildirimlere İzin Veriyor Musunuz?</h3>
+      <p class="text-xs font-semibold text-slate-600 leading-relaxed">
+        Kral Mutans saldırılarını kaçırmaman için sana her gün:<br/>
+        <span class="text-amber-600 font-bold">☀️ Sabah 07:30</span> ("Bugün dişini fırçalamayı unutma!")<br/>
+        <span class="text-indigo-600 font-bold">🌙 Akşam 21:00</span> ("Yatmadan dişini fırçala bakalım!")<br/>
+        hatırlatması göndereceğiz.
+      </p>
+      <div class="grid grid-cols-2 gap-2 pt-1">
+        <button onclick="declineNotifications()" class="py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-xs">
+          Şimdi Değil
+        </button>
+        <button onclick="acceptNotifications()" class="py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-xs shadow-md">
+          ✅ Evet, İzin Ver
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: HATIRLATICI & TELEFON TAKVİM ALARMI -->
+  <div id="reminder-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-5 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-extrabold text-slate-800">🔔 Fırçalama Hatırlatıcısı</h3>
+        <button onclick="closeReminderModal()" class="text-slate-400 hover:text-slate-700 font-bold">✕</button>
+      </div>
+
+      <div class="space-y-2.5 bg-sky-50 p-3.5 rounded-2xl border border-sky-100">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-slate-700">☀️ Sabah Hatırlatıcı:</span>
+          <input id="morning-time-input" type="time" value="07:30" class="px-2 py-1 rounded-lg border border-sky-200 text-xs font-extrabold text-sky-700 bg-white" />
+        </div>
+        <p class="text-[11px] text-amber-700 font-bold">"Bugün dişini fırçalamayı unutma!"</p>
+
+        <hr class="border-sky-200/60" />
+
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-slate-700">🌙 Akşam Hatırlatıcı:</span>
+          <input id="evening-time-input" type="time" value="21:00" class="px-2 py-1 rounded-lg border border-sky-200 text-xs font-extrabold text-indigo-700 bg-white" />
+        </div>
+        <p class="text-[11px] text-indigo-700 font-bold">"Yatmadan dişini fırçala bakalım!"</p>
+      </div>
+
+      <button onclick="saveAndTestNotifications()" class="w-full py-3 rounded-2xl bg-sky-500 hover:bg-sky-600 text-white font-extrabold text-xs shadow-md">
+        🔔 Kaydet & Test Bildirimi Gönder
+      </button>
+
+      <button onclick="downloadCalendarAlarm()" class="w-full py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-xs shadow-md">
+        📅 Telefona Günlük Takvim Alarmı Kur (.ics)
+      </button>
+      <p class="text-[10px] text-slate-400 text-center">Takvim alarmı internet kapalı olsa bile her gün sabah-akşam telefonunda çalar.</p>
+    </div>
+  </div>
+
+  <!-- MODAL 3: YÜZ ENGELLEYİCİ & YAPAY ZEKA DİŞ FIRÇASI KAMERASI -->
+  <div id="camera-modal" class="hidden fixed inset-0 z-50 bg-slate-950/90 flex flex-col items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-4 space-y-3 shadow-2xl">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-base font-extrabold text-slate-800">📷 Ajan Fırça Tarayıcısı</h3>
+          <p class="text-[11px] font-bold text-slate-500">Yüzünü gösterme, sadece diş fırçanı tut!</p>
+        </div>
+        <button onclick="closeCameraModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-600 font-bold">✕</button>
+      </div>
+
+      <!-- Canlı Video Alanı -->
+      <div class="relative rounded-2xl overflow-hidden bg-slate-900 aspect-square flex items-center justify-center">
+        <video id="camera-video" autoplay playsinline muted class="w-full h-full object-cover"></video>
+        <div class="scan-line"></div>
+
+        <!-- Hedef Çerçeve -->
+        <div id="ai-target-box" class="absolute inset-8 border-2 border-dashed border-sky-400 rounded-2xl pointer-events-none transition-colors duration-200 flex items-end justify-center pb-2">
+          <span id="ai-live-status" class="bg-slate-900/80 text-white text-[11px] font-extrabold px-3 py-1 rounded-full">
+            🤖 Yapay Zeka Hazırlanıyor...
+          </span>
+        </div>
+      </div>
+
+      <canvas id="capture-canvas" class="hidden"></canvas>
+
+      <div class="flex gap-2">
+        <button onclick="switchCameraFacing()" class="px-3.5 py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs">
+          🔄 Çevir
+        </button>
+        <button id="btn-capture-proof" onclick="captureAndAttack()"
+          class="flex-1 py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-game font-extrabold text-base shadow-lg">
+          ⚡ Fırçayı Doğrula ve Vur!
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: ZAFER SERTİFİKASI -->
+  <div id="certificate-modal" class="hidden fixed inset-0 z-50 bg-slate-900/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-5 space-y-4 shadow-2xl">
+      <div id="certificate-area" class="p-6 rounded-2xl border-4 border-amber-400 bg-gradient-to-b from-amber-50 via-white to-sky-50 text-center space-y-3">
+        <div class="text-4xl">🏆🦷🛡️</div>
+        <p class="text-xs font-extrabold tracking-widest text-amber-600 uppercase">Üstün Ağız Sağlığı Başarı Belgesi</p>
+        <h3 id="cert-player-name" class="text-2xl font-extrabold text-slate-800">Kahraman Ajan</h3>
+        <p class="text-xs font-semibold text-slate-600 leading-relaxed">
+          Kral Mutans ve Asit Ordusunu başarıyla yenerek dişlerini düzenli fırçaladığını kanıtlamış ve <strong>Altın Diş Koruyucusu</strong> unvanını kazanmıştır!
+        </p>
+        <div class="pt-3 border-t border-amber-200 flex items-center justify-between text-xs font-bold text-slate-700">
+          <span>📅 Tarih: <span id="cert-date"></span></span>
+          <span class="text-sky-700 font-extrabold">🩺 Onay: Dt. Sıla</span>
+        </div>
+      </div>
+      <div class="flex gap-2">
+        <button onclick="window.print()" class="flex-1 py-2.5 rounded-xl bg-amber-500 text-white font-extrabold text-xs">🖨️ Yazdır / PDF Kaydet</button>
+        <button onclick="document.getElementById('certificate-modal').classList.add('hidden')" class="px-4 py-2.5 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs">Kapat</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 5: HEKİM PIN GİRİŞİ (1884) -->
+  <div id="doctor-pin-modal" class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-xs w-full p-6 text-center space-y-4 shadow-2xl">
+      <div class="text-3xl">🩺🔐</div>
+      <h3 class="text-lg font-extrabold text-slate-800">Dt. Sıla Hekim Girişi</h3>
+      <input id="doctor-pin-input" type="password" maxlength="4" placeholder="••••"
+        class="w-full py-3 rounded-2xl border-2 border-sky-200 text-center font-extrabold text-xl tracking-[0.5em] focus:border-sky-500 focus:outline-none" />
+      <p id="doctor-pin-error" class="text-xs font-bold text-rose-500 hidden">Hatalı Hekim PIN Kodu!</p>
+      <div class="flex gap-2">
+        <button onclick="document.getElementById('doctor-pin-modal').classList.add('hidden')" class="flex-1 py-2.5 rounded-xl bg-slate-100 text-slate-600 font-bold text-xs">İptal</button>
+        <button onclick="verifyDoctorPin()" class="flex-1 py-2.5 rounded-xl bg-sky-600 text-white font-extrabold text-xs">Giriş Yap</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 6: DT. SILA CANLI HEKİM KONTROL PANELİ -->
+  <div id="doctor-dashboard-modal" class="hidden fixed inset-0 z-50 bg-slate-100 overflow-y-auto p-4">
+    <div class="max-w-2xl mx-auto space-y-4 pb-12">
+
+      <!-- Üst Başlık -->
+      <div class="bg-white rounded-3xl p-4 shadow-sm border border-sky-100 flex items-center justify-between">
+        <div>
+          <h2 class="text-lg font-extrabold text-sky-800">🩺 Dt. Sıla Klinik Kontrol Paneli</h2>
+          <p class="text-xs font-semibold text-slate-500">Dosya No & Şifre Eşleştirme • Canlı Takip • Not Gönderme</p>
+        </div>
+        <button onclick="closeDoctorDashboard()" class="px-3.5 py-2 rounded-xl bg-rose-50 text-rose-600 font-extrabold text-xs">✕ Kapat</button>
+      </div>
+
+      <!-- Hekim Test Modu & Firebase Bulut Ayarı -->
+      <div class="bg-white rounded-3xl p-4 shadow-sm border border-sky-100 space-y-3">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-xs font-extrabold text-slate-700">🧪 Hekim Test Modu (Klinik Demo)</p>
+            <p class="text-[11px] text-slate-500">Açıkken saat beklemesi ve AI fırça şartı esnetilir.</p>
+          </div>
+          <button id="toggle-test-mode-btn" onclick="toggleDoctorTestMode()" class="px-3 py-1.5 rounded-xl bg-slate-200 text-slate-700 font-extrabold text-xs">
+            Kapalı
+          </button>
+        </div>
+
+        <hr class="border-slate-100" />
+
+        <div>
+          <label class="block text-xs font-extrabold text-slate-700 mb-1">☁️ Canlı Bulut Veritabanı URL (Firebase Realtime DB)</label>
+          <div class="flex gap-2">
+            <input id="firebase-url-input" type="url" placeholder="https://plak-avcisi-xxxx-default-rtdb.firebaseio.com"
+              class="flex-1 px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold" />
+            <button onclick="saveFirebaseUrl()" class="px-3.5 py-2 rounded-xl bg-sky-600 text-white font-extrabold text-xs">Bağla</button>
+          </div>
+          <details class="mt-2">
+            <summary class="text-[11px] font-bold text-emerald-700 cursor-pointer">🔒 Kilitli Firebase Güvenlik Kuralını Göster (Kopyala)</summary>
+            <pre class="mt-1.5 p-2.5 rounded-xl bg-slate-900 text-emerald-300 text-[10px] overflow-x-auto select-all">{
+  "rules": {
+    "patients": {
+      ".read": false,
+      "$pin": {
+        ".read": true,
+        ".write": true
+      }
+    }
+  }
+}</pre>
+          </details>
+        </div>
+      </div>
+
+      <!-- YENİ HASTA KAYDI (Dosya No Gir -> Otomatik 4 Haneli Şifre Üret) -->
+      <div class="bg-white rounded-3xl p-4 shadow-sm border border-emerald-200 space-y-3">
+        <h3 class="text-sm font-extrabold text-emerald-800">➕ Yeni Hasta Kaydı Oluştur (Zero-PII)</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          <input id="new-patient-fileno" type="text" placeholder="Hastane Dosya No (Örn: 2026104)"
+            class="px-3 py-2.5 rounded-xl border border-slate-200 text-xs font-bold" />
+          <select id="new-patient-days" class="px-3 py-2.5 rounded-xl border border-slate-200 text-xs font-bold bg-white">
+            <option value="7">7 Günlük Hedef (700 HP)</option>
+            <option value="14" selected>14 Günlük Hedef (1400 HP)</option>
+            <option value="21">21 Günlük Hedef (2100 HP)</option>
+          </select>
+          <button onclick="registerNewPatientByDoctor()" class="py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow">
+            🔑 Şifre Üret ve Kaydet
+          </button>
+        </div>
+        <div id="created-patient-alert" class="hidden p-3 rounded-2xl bg-emerald-50 border border-emerald-300 text-xs font-bold text-emerald-900"></div>
+      </div>
+
+      <!-- HASTA LİSTESİ & NOT GÖNDERME -->
+      <div class="bg-white rounded-3xl p-4 shadow-sm border border-sky-100 space-y-3">
+        <div class="flex items-center justify-between gap-2">
+          <h3 class="text-sm font-extrabold text-slate-800">📋 Kayıtlı Hastalar (<span id="patient-count">0</span>)</h3>
+          <input id="patient-search-input" oninput="renderDoctorPatientList()" type="text" placeholder="Dosya No veya Şifre ara..."
+            class="px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-semibold w-48" />
+        </div>
+        <div id="doctor-patient-list" class="space-y-3"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // ==================== PWA MANIFEST & SERVICE WORKER OLUŞTURUCU ====================
+    (function initPWA() {
+      const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="110" fill="#0284c7"/><text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" font-size="280">🦷</text></svg>`;
+      const iconUrl = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgIcon)));
+      document.getElementById('apple-touch-icon').href = iconUrl;
+
+      const manifest = {
+        name: "Plak Avcısı: Kral Mutans'a Karşı",
+        short_name: "Plak Avcısı",
+        start_url: ".",
+        display: "standalone",
+        background_color: "#e0f2fe",
+        theme_color: "#0284c7",
+        icons: [{ src: iconUrl, sizes: "512x512", type: "image/svg+xml", purpose: "any maskable" }]
+      };
+      const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+      document.getElementById('pwa-manifest').href = URL.createObjectURL(manifestBlob);
+
+      if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+        const swCode = `
+          self.addEventListener('install', e => self.skipWaiting());
+          self.addEventListener('activate', e => self.clients.claim());
+          self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => caches.match(e.request))));
+        `;
+        const swBlob = new Blob([swCode], { type: 'application/javascript' });
+        navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => {});
+      }
+    })();
+
+    let deferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      document.getElementById('pwa-install-banner').classList.remove('hidden');
+    });
+
+    const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+    if (isIos && !isStandalone) {
+      document.getElementById('pwa-install-desc').innerText = "Safari'de alttaki Paylaş (↑) simgesine basıp 'Ana Ekrana Ekle'yi seç!";
+      document.getElementById('pwa-install-btn').innerText = "Nasıl?";
+      document.getElementById('pwa-install-banner').classList.remove('hidden');
+    }
+
+    function triggerPwaInstall() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(() => {
+          deferredPrompt = null;
+          document.getElementById('pwa-install-banner').classList.add('hidden');
+        });
+      } else if (isIos) {
+        alert("iPhone / iPad için:\n1. Ekranın en altındaki Paylaş (kare içinden yukarı ok) butonuna dokun.\n2. Listeyi aşağı kaydırıp 'Ana Ekrana Ekle' seçeneğine bas.");
+      }
+    }
+
+    // ==================== UYGULAMA VERİ MODELİ & SABİTLER ====================
+    const HEROES = [
+      { id: 'lion', emoji: '🦁', name: 'Cesur Aslan' },
+      { id: 'unicorn', emoji: '🦄', name: 'Işık Boynuz' },
+      { id: 'astronaut', emoji: '🧑‍🚀', name: 'Uzay Kaptanı' },
+      { id: 'fox', emoji: '🦊', name: 'Hızlı Tilki' },
+      { id: 'dino', emoji: '🦖', name: 'Diş Dino' },
+      { id: 'cat', emoji: '🐱', name: 'Süper Kedi' }
+    ];
+
+    const DOCTOR_PIN = '1884';
+    let selectedHero = HEROES[0];
+    let currentPatient = null;
+    let doctorTestMode = false;
+    let firebaseBaseUrl = localStorage.getItem('plak_firebase_url') || '';
+    let cocoModel = null;
+    let cameraStream = null;
+    let currentFacingMode = 'environment';
+    let currentAttackType = 'morning';
+    let aiScanInterval = null;
+    let aiVerifiedBrush = false;
+    let aiDetectedPerson = false;
+
+    // ==================== BAŞLANGIÇ ====================
+    window.addEventListener('DOMContentLoaded', () => {
+      renderHeroSelection();
+      updateCloudBadge();
+      if (firebaseBaseUrl) {
+        document.getElementById('firebase-url-input').value = firebaseBaseUrl;
+      }
+
+      const savedPin = localStorage.getItem('plak_active_pin');
+      if (savedPin) {
+        loadPatientByPin(savedPin).then(p => {
+          if (p) {
+            currentPatient = p;
+            enterGameScreen();
+          }
+        });
+      }
+
+      // Her 30 saniyede bir sabah/akşam hatırlatıcı saatini kontrol et
+      setInterval(checkScheduledReminders, 30000);
+    });
+
+    function renderHeroSelection() {
+      const grid = document.getElementById('hero-grid');
+      grid.innerHTML = HEROES.map(h => `
+        <button type="button" onclick="selectHero('${h.id}')"
+          class="p-2.5 rounded-2xl border-2 text-center transition ${selectedHero.id === h.id ? 'border-sky-500 bg-sky-50 scale-105' : 'border-slate-100 bg-white hover:bg-slate-50'}">
+          <div class="text-2xl">${h.emoji}</div>
+          <div class="text-[11px] font-extrabold text-slate-700 mt-0.5">${h.name}</div>
+        </button>
+      `).join('');
+    }
+
+    function selectHero(id) {
+      selectedHero = HEROES.find(h => h.id === id) || HEROES[0];
+      renderHeroSelection();
+    }
+
+    // ==================== VERİTABANI KATMANI (YEREL + FIREBASE BULUT) ====================
+    function getLocalPatients() {
+      return JSON.parse(localStorage.getItem('plak_patients_db') || '{}');
+    }
+
+    function saveLocalPatients(db) {
+      localStorage.setItem('plak_patients_db', JSON.stringify(db));
+    }
+
+    async function savePatientRecord(patient) {
+      const db = getLocalPatients();
+      db[patient.pin] = patient;
+      saveLocalPatients(db);
+
+      if (firebaseBaseUrl) {
+        try {
+          const cleanUrl = firebaseBaseUrl.replace(/\/$/, '');
+          await fetch(`${cleanUrl}/patients/${patient.pin}.json`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(patient)
+          });
+        } catch (err) {
+          console.warn('Bulut kaydı çevrimdışı kuyrukta:', err);
+        }
+      }
+    }
+
+    async function loadPatientByPin(pin) {
+      if (firebaseBaseUrl) {
+        try {
+          const cleanUrl = firebaseBaseUrl.replace(/\/$/, '');
+          const res = await fetch(`${cleanUrl}/patients/${pin}.json`);
+          const data = await res.json();
+          if (data && data.pin) {
+            const db = getLocalPatients();
+            db[pin] = data;
+            saveLocalPatients(db);
+            return data;
+          }
+        } catch (err) {
+          console.warn('Bulut okuma hatası, yerel kontrol ediliyor');
+        }
+      }
+      const db = getLocalPatients();
+      return db[pin] || null;
+    }
+
+    // ==================== HASTA GİRİŞ AKIŞI (SADECE İSİM + ŞİFRE) ====================
+    async function handlePatientLogin() {
+      const nameInput = document.getElementById('login-name').value.trim();
+      const pinInput = document.getElementById('login-pin').value.trim();
+      const errEl = document.getElementById('login-error');
+      errEl.classList.add('hidden');
+
+      if (!nameInput || pinInput.length !== 4) {
+        errEl.innerText = 'Lütfen kahraman adını ve Dt. Sıla’nın verdiği 4 haneli şifreyi eksiksiz gir!';
+        errEl.classList.remove('hidden');
+        return;
+      }
+
+      let patient = await loadPatientByPin(pinInput);
+
+      if (!patient) {
+        // Eğer hekim ön kaydı bulut üzerinden henüz eşleşmediyse veya yeni şifre ise
+        errEl.innerText = 'Bu 4 haneli şifre bulunamadı. Dt. Sıla’nın verdiği şifreyi kontrol et!';
+        errEl.classList.remove('hidden');
+        return;
+      }
+
+      patient.nickname = nameInput;
+      patient.heroId = selectedHero.id;
+      patient.lastActive = new Date().toISOString();
+
+      await savePatientRecord(patient);
+      currentPatient = patient;
+      localStorage.setItem('plak_active_pin', pinInput);
+      enterGameScreen();
+    }
+
+    function enterGameScreen() {
+      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('game-screen').classList.remove('hidden');
+      updateGameUI();
+
+      // Açılışta bildirim izni sor (daha önce sorulmadıysa)
+      if ('Notification' in window && Notification.permission === 'default' && !localStorage.getItem('plak_notif_asked')) {
+        setTimeout(() => {
+          document.getElementById('permission-modal').classList.remove('hidden');
+        }, 600);
+      }
+    }
+
+    function logoutPatient() {
+      localStorage.removeItem('plak_active_pin');
+      currentPatient = null;
+      document.getElementById('game-screen').classList.add('hidden');
+      document.getElementById('login-screen').classList.remove('hidden');
+    }
+
+    // ==================== OYUN ARAYÜZÜ GÜNCELLEME ====================
+    function getTodayStr() {
+      return new Date().toISOString().split('T')[0];
+    }
+
+    function updateGameUI() {
+      if (!currentPatient) return;
+      const hero = HEROES.find(h => h.id === currentPatient.heroId) || HEROES[0];
+
+      document.getElementById('player-avatar-badge').innerText = hero.emoji;
+      document.getElementById('player-display-name').innerText = currentPatient.nickname || 'Ajan';
+      document.getElementById('player-pin-tag').innerText = `#${currentPatient.pin}`;
+      document.getElementById('streak-count').innerText = currentPatient.streak || 0;
+      document.getElementById('xp-count').innerText = currentPatient.xp || 0;
+
+      // Hekim Notu Bannerı
+      const noteBanner = document.getElementById('doctor-note-banner');
+      if (currentPatient.doctorNote) {
+        document.getElementById('doctor-note-text').innerText = currentPatient.doctorNote;
+        noteBanner.classList.remove('hidden');
+      } else {
+        noteBanner.classList.add('hidden');
+      }
+
+      // Boss HP
+      const maxHp = (currentPatient.targetDays || 14) * 100;
+      const currentHp = Math.max(0, currentPatient.bossHp ?? maxHp);
+      const pct = Math.round((currentHp / maxHp) * 100);
+
+      document.getElementById('target-days-label').innerText = currentPatient.targetDays || 14;
+      document.getElementById('boss-hp-bar').style.width = `${pct}%`;
+      document.getElementById('boss-hp-text').innerText = `${currentHp} / ${maxHp}`;
+      document.getElementById('boss-percent').innerText = pct;
+
+      if (currentHp <= 0) {
+        document.getElementById('monster-emoji').innerText = '🏳️';
+        document.getElementById('monster-taunt').innerText = 'Tebrikler! Kral Mutans teslim oldu!';
+        document.getElementById('victory-cert-btn').classList.remove('hidden');
+      } else {
+        document.getElementById('monster-emoji').innerText = pct > 50 ? '🦠' : '🤕';
+        document.getElementById('victory-cert-btn').classList.add('hidden');
+      }
+
+      // Günlük tamamlanan saldırılar
+      const today = getTodayStr();
+      const logs = currentPatient.dailyLogs?.[today] || {};
+      document.getElementById('badge-morning-done').classList.toggle('hidden', !logs.morning);
+      document.getElementById('badge-evening-done').classList.toggle('hidden', !logs.evening);
+
+      ['water', 'floss', 'apple', 'tongue'].forEach(p => {
+        const btn = document.getElementById(`power-${p}`);
+        if (logs[p]) {
+          btn.classList.add('opacity-50', 'line-through');
+        } else {
+          btn.classList.remove('opacity-50', 'line-through');
+        }
+      });
+    }
+
+    // ==================== BİLDİRİM & TAKVİM ALARMI ====================
+    function acceptNotifications() {
+      localStorage.setItem('plak_notif_asked', '1');
+      document.getElementById('permission-modal').classList.add('hidden');
+      if ('Notification' in window) {
+        Notification.requestPermission().then(perm => {
+          if (perm === 'granted') {
+            new Notification('🦷 Plak Avcısı Hazır!', {
+              body: 'Sabah 07:30 ve Akşam 21:00 diş fırçalama hatırlatıcıların aktif!'
+            });
+          }
+        });
+      }
+    }
+
+    function declineNotifications() {
+      localStorage.setItem('plak_notif_asked', '1');
+      document.getElementById('permission-modal').classList.add('hidden');
+    }
+
+    function openReminderModal() {
+      document.getElementById('morning-time-input').value = localStorage.getItem('plak_morning_time') || '07:30';
+      document.getElementById('evening-time-input').value = localStorage.getItem('plak_evening_time') || '21:00';
+      document.getElementById('reminder-modal').classList.remove('hidden');
+    }
+
+    function closeReminderModal() {
+      document.getElementById('reminder-modal').classList.add('hidden');
+    }
+
+    function saveAndTestNotifications() {
+      const mTime = document.getElementById('morning-time-input').value || '07:30';
+      const eTime = document.getElementById('evening-time-input').value || '21:00';
+      localStorage.setItem('plak_morning_time', mTime);
+      localStorage.setItem('plak_evening_time', eTime);
+
+      if ('Notification' in window) {
+        Notification.requestPermission().then(perm => {
+          if (perm === 'granted') {
+            new Notification('☀️ Sabah Hatırlatıcı Testi (' + mTime + ')', {
+              body: 'Bugün dişini fırçalamayı unutma!'
+            });
+            setTimeout(() => {
+              new Notification('🌙 Akşam Hatırlatıcı Testi (' + eTime + ')', {
+                body: 'Yatmadan dişini fırçala bakalım!'
+              });
+            }, 1500);
+          } else {
+            alert('Tarayıcı bildirim izni kapalı. Alttaki "Telefona Günlük Takvim Alarmı Kur" butonunu kullanabilirsin!');
+          }
+        });
+      }
+      closeReminderModal();
+    }
+
+    function checkScheduledReminders() {
+      if (!('Notification' in window) || Notification.permission !== 'granted') return;
+      const now = new Date();
+      const hhmm = now.toTimeString().slice(0, 5);
+      const todayKey = getTodayStr() + '_' + hhmm;
+      if (localStorage.getItem('plak_last_notified') === todayKey) return;
+
+      const mTime = localStorage.getItem('plak_morning_time') || '07:30';
+      const eTime = localStorage.getItem('plak_evening_time') || '21:00';
+
+      if (hhmm === mTime) {
+        localStorage.setItem('plak_last_notified', todayKey);
+        new Notification('☀️ Günaydın Ajan!', { body: 'Bugün dişini fırçalamayı unutma!' });
+      } else if (hhmm === eTime) {
+        localStorage.setItem('plak_last_notified', todayKey);
+        new Notification('🌙 İyi Geceler Ajan!', { body: 'Yatmadan dişini fırçala bakalım!' });
+      }
+    }
+
+    function downloadCalendarAlarm() {
+      const mTime = (document.getElementById('morning-time-input').value || '07:30').replace(':', '') + '00';
+      const eTime = (document.getElementById('evening-time-input').value || '21:00').replace(':', '') + '00';
+      const dateStamp = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+
+      const icsContent = [
+        'BEGIN:VCALENDAR',
+        'VERSION:2.0',
+        'PRODID:-//Dt. Sila//Plak Avcisi//TR',
+        'BEGIN:VEVENT',
+        `DTSTART:${dateStamp}T${mTime}`,
+        'RRULE:FREQ=DAILY',
+        'SUMMARY:☀️ Bugün dişini fırçalamayı unutma!',
+        'DESCRIPTION:Kral Mutans sabah saldırısına hazır! Dişini fırçala ve Plak Avcısı uygulamasından puanını kap.',
+        'BEGIN:VALARM',
+        'TRIGGER:-PT0M',
+        'ACTION:DISPLAY',
+        'DESCRIPTION:Bugün dişini fırçalamayı unutma!',
+        'END:VALARM',
+        'END:VEVENT',
+        'BEGIN:VEVENT',
+        `DTSTART:${dateStamp}T${eTime}`,
+        'RRULE:FREQ=DAILY',
+        'SUMMARY:🌙 Yatmadan dişini fırçala bakalım!',
+        'DESCRIPTION:Gece boyunca dişlerini korumak için Plak Avcısı akşam görevini tamamla!',
+        'BEGIN:VALARM',
+        'TRIGGER:-PT0M',
+        'ACTION:DISPLAY',
+        'DESCRIPTION:Yatmadan dişini fırçala bakalım!',
+        'END:VALARM',
+        'END:VEVENT',
+        'END:VCALENDAR'
+      ].join('\r\n');
+
+      const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'dis-fircalama-hatirlatici.ics';
+      link.click();
+    }
+
+    // ==================== CANLI AI KAMERA & YÜZ ENGELLEYİCİ ====================
+    async function startBrushVerification(type) {
+      const today = getTodayStr();
+      if (!doctorTestMode && currentPatient?.dailyLogs?.[today]?.[type]) {
+        alert('Bu öğünün saldırısını bugün zaten tamamladın! Harikasın!');
+        return;
+      }
+
+      if (!doctorTestMode) {
+        const hour = new Date().getHours();
+        if (type === 'morning' && (hour < 6 || hour >= 14)) {
+          alert('Sabah saldırısı 06:00 - 14:00 saatleri arasında yapılabilir!');
+          return;
+        }
+        if (type === 'evening' && (hour < 18 && hour >= 2)) {
+          alert('Akşam saldırısı 18:00 - 02:00 saatleri arasında yapılabilir!');
+          return;
+        }
+      }
+
+      currentAttackType = type;
+      aiVerifiedBrush = false;
+      aiDetectedPerson = false;
+      document.getElementById('camera-modal').classList.remove('hidden');
+      await openCameraStream();
+      startAiDetectionLoop();
+    }
+
+    async function openCameraStream() {
+      if (cameraStream) {
+        cameraStream.getTracks().forEach(t => t.stop());
+      }
+      try {
+        cameraStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: currentFacingMode, width: { ideal: 480 }, height: { ideal: 480 } },
+          audio: false
+        });
+        document.getElementById('camera-video').srcObject = cameraStream;
+      } catch (err) {
+        alert('Kamera erişimi açılamadı. Lütfen tarayıcı ayarlarından kamera izni verin.');
+      }
+    }
+
+    function switchCameraFacing() {
+      currentFacingMode = currentFacingMode === 'environment' ? 'user' : 'environment';
+      openCameraStream();
+    }
+
+    async function startAiDetectionLoop() {
+      const statusBadge = document.getElementById('ai-live-status');
+      const targetBox = document.getElementById('ai-target-box');
+
+      if (!cocoModel) {
+        statusBadge.innerText = '🤖 Yapay Zeka Tarayıcı Yükleniyor...';
+        try {
+          cocoModel = await cocoSsd.load();
+        } catch (e) {
+          statusBadge.innerText = '⚠️ AI Çevrimdışı - Fırçayı Ortala';
+          return;
+        }
+      }
+
+      clearInterval(aiScanInterval);
+      aiScanInterval = setInterval(async () => {
+        const video = document.getElementById('camera-video');
+        if (!video || video.readyState !== 4 || !cocoModel) return;
+
+        const predictions = await cocoModel.detect(video);
+        const hasPerson = predictions.some(p => p.class === 'person' && p.score > 0.55);
+        const hasBrush = predictions.some(p => p.class === 'toothbrush' && p.score > 0.35);
+
+        aiDetectedPerson = hasPerson;
+        aiVerifiedBrush = hasBrush;
+
+        if (hasPerson) {
+          targetBox.className = 'absolute inset-8 border-4 border-rose-500 rounded-2xl pointer-events-none flex items-end justify-center pb-2';
+          statusBadge.className = 'bg-rose-600 text-white text-[11px] font-extrabold px-3 py-1 rounded-full';
+          statusBadge.innerText = '🚫 Güvenlik: Yüzünü Değil Sadece Fırçanı Göster!';
+        } else if (hasBrush) {
+          targetBox.className = 'absolute inset-8 border-4 border-emerald-400 rounded-2xl pointer-events-none flex items-end justify-center pb-2';
+          statusBadge.className = 'bg-emerald-600 text-white text-[11px] font-extrabold px-3 py-1 rounded-full';
+          statusBadge.innerText = '✅ Diş Fırçası Doğrulandı! Ateşle!';
+        } else {
+          const otherObj = predictions[0]?.class;
+          targetBox.className = 'absolute inset-8 border-2 border-dashed border-sky-400 rounded-2xl pointer-events-none flex items-end justify-center pb-2';
+          statusBadge.className = 'bg-slate-900/80 text-white text-[11px] font-extrabold px-3 py-1 rounded-full';
+          statusBadge.innerText = otherObj ? `🔍 Algılanan: ${otherObj} (Diş Fırçası Bekleniyor)` : '🪥 Diş Fırçanı Çerçeveye Yaklaştır';
+        }
+      }, 650);
+    }
+
+    function closeCameraModal() {
+      clearInterval(aiScanInterval);
+      if (cameraStream) {
+        cameraStream.getTracks().forEach(t => t.stop());
+        cameraStream = null;
+      }
+      document.getElementById('camera-modal').classList.add('hidden');
+    }
+
+    async function captureAndAttack() {
+      if (!doctorTestMode) {
+        if (aiDetectedPerson) {
+          alert('🚫 Güvenlik Uyarısı: Kadrajda yüz veya kişi algılandı! Lütfen sadece diş fırçanı çek.');
+          return;
+        }
+        if (!aiVerifiedBrush) {
+          alert('🪥 Diş fırçası doğrulanamadı! Lütfen diş fırçanı kameraya net şekilde gösterip yeşil onayı bekle.');
+          return;
+        }
+      }
+
+      // 140x140 düşük boyutlu güvenli kanıt önizlemesi oluştur
+      const video = document.getElementById('camera-video');
+      const canvas = document.getElementById('capture-canvas');
+      canvas.width = 140;
+      canvas.height = 140;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(video, 0, 0, 140, 140);
+      const thumbDataUrl = canvas.toDataURL('image/jpeg', 0.65);
+
+      closeCameraModal();
+      await applyDamageToBoss(50, currentAttackType, thumbDataUrl);
+    }
+
+    async function useSuperPower(powerKey, label) {
+      const today = getTodayStr();
+      if (!doctorTestMode && currentPatient?.dailyLogs?.[today]?.[powerKey]) {
+        alert('Bu süper gücü bugün zaten kullandın!');
+        return;
+      }
+      await applyDamageToBoss(15, powerKey, null, label);
+    }
+
+    async function applyDamageToBoss(damage, actionKey, photoUrl = null, powerLabel = null) {
+      const today = getTodayStr();
+      if (!currentPatient.dailyLogs) currentPatient.dailyLogs = {};
+      if (!currentPatient.dailyLogs[today]) currentPatient.dailyLogs[today] = {};
+
+      const isFirstActionToday = Object.keys(currentPatient.dailyLogs[today]).length === 0;
+      currentPatient.dailyLogs[today][actionKey] = true;
+
+      if (isFirstActionToday) {
+        currentPatient.streak = (currentPatient.streak || 0) + 1;
+      }
+
+      const maxHp = (currentPatient.targetDays || 14) * 100;
+      currentPatient.bossHp = Math.max(0, (currentPatient.bossHp ?? maxHp) - damage);
+      currentPatient.xp = (currentPatient.xp || 0) + damage;
+
+      if (photoUrl) {
+        if (!currentPatient.photos) currentPatient.photos = [];
+        currentPatient.photos.unshift({
+          type: actionKey === 'morning' ? 'Sabah' : 'Akşam',
+          date: new Date().toLocaleString('tr-TR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }),
+          img: photoUrl
+        });
+        currentPatient.photos = currentPatient.photos.slice(0, 8);
+      }
+
+      // Canavar Hasar Animasyonu
+      const monsterEl = document.getElementById('monster-emoji');
+      const dmgPopup = document.getElementById('damage-popup');
+      monsterEl.classList.add('animate-shake');
+      dmgPopup.innerText = `-${damage} HP!`;
+      dmgPopup.classList.remove('hidden');
+      setTimeout(() => {
+        monsterEl.classList.remove('animate-shake');
+        dmgPopup.classList.add('hidden');
+      }, 900);
+
+      await savePatientRecord(currentPatient);
+      updateGameUI();
+    }
+
+    function openCertificateModal() {
+      document.getElementById('cert-player-name').innerText = currentPatient.nickname || 'Kahraman Ajan';
+      document.getElementById('cert-date').innerText = new Date().toLocaleDateString('tr-TR');
+      document.getElementById('certificate-modal').classList.remove('hidden');
+    }
+
+    // ==================== DT. SILA HEKİM PANELİ (PIN: 1884) ====================
+    function openDoctorPinModal() {
+      document.getElementById('doctor-pin-input').value = '';
+      document.getElementById('doctor-pin-error').classList.add('hidden');
+      document.getElementById('doctor-pin-modal').classList.remove('hidden');
+    }
+
+    async function verifyDoctorPin() {
+      const val = document.getElementById('doctor-pin-input').value.trim();
+      if (val === DOCTOR_PIN) {
+        document.getElementById('doctor-pin-modal').classList.add('hidden');
+        document.getElementById('doctor-dashboard-modal').classList.remove('hidden');
+        await renderDoctorPatientList();
+      } else {
+        document.getElementById('doctor-pin-error').classList.remove('hidden');
+      }
+    }
+
+    function closeDoctorDashboard() {
+      document.getElementById('doctor-dashboard-modal').classList.add('hidden');
+      if (currentPatient) updateGameUI();
+    }
+
+    function toggleDoctorTestMode() {
+      doctorTestMode = !doctorTestMode;
+      const btn = document.getElementById('toggle-test-mode-btn');
+      btn.innerText = doctorTestMode ? 'AÇIK (Test Aktif)' : 'Kapalı';
+      btn.className = doctorTestMode
+        ? 'px-3 py-1.5 rounded-xl bg-amber-500 text-white font-extrabold text-xs'
+        : 'px-3 py-1.5 rounded-xl bg-slate-200 text-slate-700 font-extrabold text-xs';
+    }
+
+    function updateCloudBadge() {
+      const badge = document.getElementById('cloud-status-badge');
+      if (firebaseBaseUrl) {
+        badge.innerText = '☁️ Canlı Bulut';
+        badge.className = 'hidden sm:inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700';
+      } else {
+        badge.innerText = '💾 Yerel Mod';
+        badge.className = 'hidden sm:inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600';
+      }
+    }
+
+    async function saveFirebaseUrl() {
+      const url = document.getElementById('firebase-url-input').value.trim();
+      firebaseBaseUrl = url;
+      localStorage.setItem('plak_firebase_url', url);
+      updateCloudBadge();
+      alert(url ? '☁️ Bulut veritabanı bağlantısı kaydedildi!' : 'Yerel moda geçildi.');
+      await renderDoctorPatientList();
+    }
+
+    async function registerNewPatientByDoctor() {
+      const fileNo = document.getElementById('new-patient-fileno').value.trim();
+      const targetDays = parseInt(document.getElementById('new-patient-days').value, 10) || 14;
+      if (!fileNo) {
+        alert('Lütfen hastane dosya numarasını girin!');
+        return;
+      }
+
+      const db = getLocalPatients();
+      let newPin;
+      do {
+        newPin = Math.floor(1000 + Math.random() * 9000).toString();
+      } while (db[newPin]);
+
+      const newPatient = {
+        pin: newPin,
+        fileNo: fileNo,
+        nickname: 'Henüz Giriş Yapmadı',
+        heroId: 'lion',
+        targetDays: targetDays,
+        bossHp: targetDays * 100,
+        streak: 0,
+        xp: 0,
+        doctorNote: '',
+        dailyLogs: {},
+        photos: [],
+        createdAt: new Date().toISOString()
+      };
+
+      await savePatientRecord(newPatient);
+      document.getElementById('new-patient-fileno').value = '';
+
+      const alertBox = document.getElementById('created-patient-alert');
+      alertBox.innerHTML = `✅ Kayıt Oluşturuldu! <strong>Dosya No: ${fileNo}</strong> için Hasta Giriş Şifresi: <span class="text-lg font-extrabold bg-white px-2.5 py-0.5 rounded-lg border border-emerald-400 ml-1">${newPin}</span><br/><span class="text-[11px] font-normal">Veliye sadece bu 4 haneli şifreyi vermeniz yeterli.</span>`;
+      alertBox.classList.remove('hidden');
+
+      await renderDoctorPatientList();
+    }
+
+    async function renderDoctorPatientList() {
+      const db = getLocalPatients();
+      const search = (document.getElementById('patient-search-input').value || '').toLowerCase();
+      const patients = Object.values(db).filter(p =>
+        (p.fileNo || '').toLowerCase().includes(search) ||
+        (p.pin || '').includes(search) ||
+        (p.nickname || '').toLowerCase().includes(search)
+      );
+
+      document.getElementById('patient-count').innerText = patients.length;
+      const container = document.getElementById('doctor-patient-list');
+
+      if (patients.length === 0) {
+        container.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">Henüz kayıtlı hasta bulunmuyor. Yukarıdan dosya numarası ile şifre üretebilirsiniz.</p>`;
+        return;
+      }
+
+      container.innerHTML = patients.map(p => {
+        const maxHp = (p.targetDays || 14) * 100;
+        const pct = Math.max(0, Math.round(((p.bossHp ?? maxHp) / maxHp) * 100));
+        const photosHtml = (p.photos || []).map(ph => `
+          <div class="text-center">
+            <img src="${ph.img}" class="w-14 h-14 rounded-xl object-cover border border-slate-200" />
+            <span class="block text-[9px] font-bold text-slate-500 mt-0.5">${ph.type}</span>
+          </div>
+        `).join('');
+
+        return `
+          <div class="p-3.5 rounded-2xl border border-slate-200 bg-slate-50/70 space-y-2.5">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-1 rounded-lg bg-sky-600 text-white text-xs font-extrabold">📁 Dosya: ${p.fileNo}</span>
+                <span class="px-2.5 py-1 rounded-lg bg-amber-100 text-amber-800 border border-amber-300 text-xs font-extrabold">🔑 Şifre: ${p.pin}</span>
+              </div>
+              <button onclick="deletePatientRecord('${p.pin}')" class="text-[11px] font-bold text-rose-500 hover:underline">Sil</button>
+            </div>
+
+            <div class="flex items-center justify-between text-xs font-bold text-slate-700">
+              <span>🦸 Oyundaki Adı: <strong>${p.nickname}</strong></span>
+              <span>🔥 ${p.streak || 0} Gün | Canavar: %${pct} HP</span>
+            </div>
+
+            <!-- 3 HAZIR + KİŞİSELLEŞTİRİLEBİLİR NOT GÖNDERME -->
+            <div class="pt-2 border-t border-slate-200 space-y-1.5">
+              <p class="text-[11px] font-extrabold text-slate-600">💌 Hastaya Not Gönder (Hazır Seç veya Düzenle):</p>
+              <div class="flex flex-wrap gap-1.5">
+                <button onclick="fillDoctorNote('${p.pin}', 'Harika gidiyorsun böyle devam et 🏆')"
+                  class="px-2 py-1 rounded-lg bg-emerald-100 hover:bg-emerald-200 text-emerald-800 text-[10px] font-extrabold">
+                  🏆 Olumlu
+                </button>
+                <button onclick="fillDoctorNote('${p.pin}', 'Dişlerine iyi bak Kral Mutans\\'ı yenmeliyiz 🎖️')"
+                  class="px-2 py-1 rounded-lg bg-rose-100 hover:bg-rose-200 text-rose-800 text-[10px] font-extrabold">
+                  🎖️ Uyarı
+                </button>
+                <button onclick="fillDoctorNote('${p.pin}', 'Dişlerini fırçalamayı unutma 🪥')"
+                  class="px-2 py-1 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-800 text-[10px] font-extrabold">
+                  🪥 Hatırlatıcı
+                </button>
+              </div>
+              <div class="flex gap-1.5">
+                <input id="note-input-${p.pin}" type="text" value="${(p.doctorNote || '').replace(/"/g, '&quot;')}"
+                  placeholder="Hastaya özel not yazın..."
+                  class="flex-1 px-2.5 py-1.5 rounded-xl border border-slate-300 text-xs font-semibold bg-white" />
+                <button onclick="sendDoctorNoteToPatient('${p.pin}')"
+                  class="px-3 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-extrabold">
+                  Gönder
+                </button>
+              </div>
+            </div>
+
+            ${photosHtml ? `<div class="pt-2 border-t border-slate-200"><p class="text-[10px] font-bold text-slate-500 mb-1">📷 Son Fırça Kanıtları:</p><div class="flex gap-2 overflow-x-auto">${photosHtml}</div></div>` : ''}
+          </div>
+        `;
+      }).join('');
+    }
+
+    function fillDoctorNote(pin, presetText) {
+      const input = document.getElementById(`note-input-${pin}`);
+      if (input) input.value = presetText;
+    }
+
+    async function sendDoctorNoteToPatient(pin) {
+      const db = getLocalPatients();
+      const patient = db[pin];
+      if (!patient) return;
+
+      const text = document.getElementById(`note-input-${pin}`).value.trim();
+      patient.doctorNote = text;
+      await savePatientRecord(patient);
+
+      if (currentPatient && currentPatient.pin === pin) {
+        currentPatient.doctorNote = text;
+      }
+      alert('✅ Not hastanın ekranına gönderildi!');
+    }
+
+    async function deletePatientRecord(pin) {
+      if (!confirm('Bu hasta kaydını silmek istediğinize emin misiniz?')) return;
+      const db = getLocalPatients();
+      delete db[pin];
+      saveLocalPatients(db);
+      if (firebaseBaseUrl) {
+        const cleanUrl = firebaseBaseUrl.replace(/\/$/, '');
+        fetch(`${cleanUrl}/patients/${pin}.json`, { method: 'DELETE' }).catch(() => {});
+      }
+      await renderDoctorPatientList();
+    }
+  </script>
+</body>
+</html>
